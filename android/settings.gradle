@@ -1,0 +1,3 @@
+rootProject.name = 'hedonista'
+
+include ':app'
