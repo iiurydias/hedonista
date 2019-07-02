@@ -9,11 +9,11 @@ export default class FavoriteBlock extends Component {
       <TouchableOpacity activeOpacity={0.7}>
         <View style={styles.Container}>
           <View style={styles.InfoContainer}>
-            <Text style={styles.Title} numberOfLines={1}>Lanchonete do seu Zé dsfsdfsdfsdfsd sdfdfdsfds sdfsdfdsfsdf</Text>
-            <Text style={styles.Address} numberOfLines={1}>Rua Antônio de Souza Gomes, 53 fsdfdfsdf sfsdgdfg sfgsfgsfg</Text>
+            <Text style={styles.Title} numberOfLines={1}>{this.props.title}</Text>
+            <Text style={styles.Address} numberOfLines={1}>{this.props.address}</Text>
           </View>
           <View style={styles.IconContainer}>
-            <Icon name='utensils' size={30} color="#603DEB" />
+            <Icon name={this.props.icon} size={30} color="#603DEB" />
           </View>
         </View>
         </TouchableOpacity>

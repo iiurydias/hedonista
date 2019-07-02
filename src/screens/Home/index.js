@@ -36,13 +36,13 @@ class Home extends Component {
             <Text style={styles.H1}>Meus pontos favoritos</Text>
           </View>
           <View style={styles.FavoriteContainer}>
-              <ScrollView style={styles.FavoriteBlock}>
-                <FavoriteBlock />
-                <FavoriteBlock />
-                <FavoriteBlock />
-                <FavoriteBlock />
-                <FavoriteBlock />
-              </ScrollView>
+            <ScrollView style={styles.FavoriteBlock} showsVerticalScrollIndicator={false}>
+              <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock icon='umbrella-beach' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock icon='building' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+            </ScrollView>
           </View>
         </ScrollView>
       </Fragment>

@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderTopStartRadius: 80,
     borderTopEndRadius: 80,
+    flex: 1
   }
 });
 
