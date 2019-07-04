@@ -80,7 +80,7 @@ class Points extends Component {
     return (
       <Provider store={store}>
         <Header
-          left={<Reset />}
+          left={<Reset navigate={() => this.props.navigation.goBack()} />}
           center={
             <Text style={{ fontFamily: "MyriadPro", color: "#FFF" }}>
               LOCAIS COM COMIDA BARATA

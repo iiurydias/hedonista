@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 export default class CategoryBox extends Component {
   render() {
     return (
-      <TouchableOpacity activeOpacity={0.7} style={styles.Container}>
+      <TouchableOpacity onPress={this.props.onPress} activeOpacity={0.7} style={styles.Container}>
         <View style={styles.FirstLevel}>
           <View style={styles.SecondLevel}>
             <View style={styles.ThirdLevel}>

@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   FavoriteBlock:{
-   top: -10
+   top: -15
   },
   Container2:{
     backgroundColor: '#EEEEEE',

@@ -12,24 +12,26 @@ class Reset extends Component {
   render() {
     return (
       <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => {
-                this.props.destination &&
-                this.props.actions.destinationActions.setDestination(null);
-                this.props.actions.durationActions.setDuration(null);
-                this.props.actions.distanceActions.setDistance(null);
-                this.props.actions.clickedActions.setClicked(false);
-              }}
-              style={{ paddingLeft: 10, paddingRight: 10 }}
-            >
-              <Icon name="arrow-left" color="#fff" size={25} />
-            </TouchableOpacity>
+        activeOpacity={0.7}
+        onPress={() => {
+          if (this.props.clicked) {
+            this.props.actions.destinationActions.setDestination(null),
+              this.props.actions.durationActions.setDuration(null),
+              this.props.actions.distanceActions.setDistance(null),
+              this.props.actions.clickedActions.setClicked(false)
+          } else { this.props.navigate() }
+        }}
+        style={{ paddingLeft: 10, paddingRight: 10 }}
+      >
+        <Icon name="arrow-left" color="#fff" size={25} />
+      </TouchableOpacity>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  destination: state.destination
+  destination: state.destination,
+  clicked: state.clicked
 })
 
 function mapDispatchToProps(dispatch) {

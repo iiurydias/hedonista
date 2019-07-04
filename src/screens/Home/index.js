@@ -25,12 +25,12 @@ class Home extends Component {
             <Text style={styles.H1}>Escolha uma categoria</Text>
             <View>
               <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-                <CategoryBox icon='utensils' title='Comida' pointNumber='153' />
-                <CategoryBox icon='umbrella-beach' title='Lazer' pointNumber='63' />
-                <CategoryBox icon='building' title='Estadia' pointNumber='20' />
-                <CategoryBox icon='utensils' title='Comida' pointNumber='153' />
-                <CategoryBox icon='utensils' title='Comida' pointNumber='153' />
-                <CategoryBox icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='umbrella-beach' title='Lazer' pointNumber='63' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='building' title='Estadia' pointNumber='20' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
               </ScrollView>
             </View>
             <Text style={styles.H1}>Meus pontos favoritos</Text>

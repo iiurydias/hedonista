@@ -191,7 +191,6 @@ class Map extends Component {
                       longitude: parseFloat(p.longitude)
                     }}
                     onPress={() => {
-                      p.hidden = false;
                       this.setState({
                         region: {
                           latitude: parseFloat(p.latitude),
