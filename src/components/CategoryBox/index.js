@@ -4,6 +4,9 @@ import { View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default class CategoryBox extends Component {
+  constructor(props) {
+    super(props)
+  }
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress} activeOpacity={0.7} style={styles.Container}>
