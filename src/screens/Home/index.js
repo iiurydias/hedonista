@@ -1,11 +1,31 @@
 import React, { Component, Fragment } from "react";
 import Header from "../../components/Header";
 import FavoriteBlock from "../../components/FavoriteBlock";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, BackHandler } from "react-native";
 import CategoryBox from "../../components/CategoryBox";
 import styles from "./styles";
 
+const NO_LOCATION_PROVIDER_AVAILABLE = 2;
+
+
 class Home extends Component {
+ 
+  checkLocation() {
+      navigator.geolocation.getCurrentPosition(
+      () => {
+      },
+      (error) => {
+        if (error.code === NO_LOCATION_PROVIDER_AVAILABLE) {
+          alert('Você precisa habilitar sua localização para que possamos encontrar os pontos mais próximos de você!')
+        }
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', function(){});
+     this.checkLocation()
+  }
   render() {
     return (
       <Fragment>
@@ -25,12 +45,12 @@ class Home extends Component {
             <Text style={styles.H1}>Escolha uma categoria</Text>
             <View>
               <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
-                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='umbrella-beach' title='Lazer' pointNumber='63' />
-                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='building' title='Estadia' pointNumber='20' />
-                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
-                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
-                <CategoryBox onPress={() => this.props.navigation.navigate('Points')} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points', {icon: 'utensils'})} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points', {icon: 'theater-masks'})} icon='theater-masks' title='Lazer' pointNumber='63' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points', {icon: 'building'})} icon='building' title='Estadia' pointNumber='20' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points', {icon: 'utensils'})} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points', {icon: 'utensils'})} icon='utensils' title='Comida' pointNumber='153' />
+                <CategoryBox onPress={() => this.props.navigation.navigate('Points', {icon: 'utensils'})} icon='utensils' title='Comida' pointNumber='153' />
               </ScrollView>
             </View>
             <Text style={styles.H1}>Meus pontos favoritos</Text>
@@ -38,7 +58,7 @@ class Home extends Component {
           <View style={styles.FavoriteContainer}>
             <ScrollView style={styles.FavoriteBlock} showsVerticalScrollIndicator={false}>
               <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
-              <FavoriteBlock icon='umbrella-beach' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock icon='theater-masks' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
               <FavoriteBlock icon='building' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
               <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
               <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />

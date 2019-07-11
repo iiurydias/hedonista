@@ -1,97 +1,79 @@
-import { StyleSheet,Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
-const {width: WIDTH} = Dimensions.get('window')
+const { width: WIDTH } = Dimensions.get('window')
 const styles = StyleSheet.create({
-  Container:{
+  Container: {
     backgroundColor: '#7049f9',
     height: '100%',
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  inputContainer:{
+  inputContainer: {
     width: WIDTH - 70,
     borderBottomWidth: 1,
-    //borderRadius: 20,
-    //shadowColor: "#000",
-    //shadowOffset: {
-     // width: 0,
-     // height: 1,
-    //},
-    //shadowOpacity: 0.22,
-    //shadowRadius: 2.22,
-    //elevation: 3,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    margin: 15    
-    },
-  emailInput:{
+    margin: 15
+  },
+  input: {
     fontFamily: "MyriadPro",
     width: '90%',
     //backgroundColor: '#FFF',
     //borderRadius: 20,
     padding: 10,
     paddingLeft: 20,
-    color: '#FFF',
     opacity: 0.7
   },
-  passInput:{
-    fontFamily: "MyriadPro",
-    width: '75%',
-    //backgroundColor: '#FFF',
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-    padding: 10,
-    paddingLeft: 20,
-    color: '#FFF'
-  },
-  inputIcon:{
+  inputIcon: {
     width: '10%',
     justifyContent: "center",
     alignItems: "center",
   },
-  logo:{
-    fontFamily: "MyriadPro",
-    fontSize: 30,
-    color: '#FFF'
+  logoContainer: {
+    borderRadius: (WIDTH * 0.2) / 2,
+    width: WIDTH * 0.2,
+    height: WIDTH * 0.2,
+    backgroundColor: '#FFF',
+    opacity: 0.3,
+    marginBottom: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  logoContainer:{
-    marginBottom: 20
-  },
-  Button:{
+  Button: {
     backgroundColor: '#FFF',
     borderRadius: 40,
     height: 45,
     justifyContent: "center",
     alignItems: "center",
   },
-  btnTxt:{
+  btnTxt: {
     fontFamily: "MyriadPro",
     fontSize: 15,
     color: '#7049f9'
   },
-  bottomContainer:{
+  bottomContainer: {
     marginTop: 15,
     justifyContent: "center",
     alignItems: "center",
   },
-  createAccountTxt:{
+  createAccountTxt: {
     fontFamily: "MyriadPro",
     fontSize: 15,
     color: '#FFF',
     padding: 10,
   },
-  buttonContainer:{
+  buttonContainer: {
     width: WIDTH - 55,
     marginTop: 25
   },
-  createAccountContainer:{
+  createAccountContainer: {
     height: 45,
     flexWrap: 'wrap',
     justifyContent: "center",
     alignItems: "flex-end",
   },
-  eyeBtn:{
+  eyeBtn: {
     //backgroundColor: 'white',
     width: '15%',
     justifyContent: "center",

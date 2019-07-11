@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: "MyriadPro",
     fontSize: 25,
-    color: '#603DEB'
+    color: '#7049f9'
   },
   Name:{
     marginLeft: 10,
     fontFamily: "MyriadPro",
     fontSize: 20,
-    color: '#603DEB'
+    color: '#7049f9'
   },
   H1:{
     marginTop: 20,

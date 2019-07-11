@@ -6,14 +6,14 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 export default class FavoriteBlock extends Component {
   render() {
     return (
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.9}>
         <View style={styles.Container}>
           <View style={styles.InfoContainer}>
             <Text style={styles.Title} numberOfLines={1}>{this.props.title}</Text>
             <Text style={styles.Address} numberOfLines={1}>{this.props.address}</Text>
           </View>
           <View style={styles.IconContainer}>
-            <Icon name={this.props.icon} size={30} color="#603DEB" />
+            <Icon name={this.props.icon} size={30} color="#7049f9" />
           </View>
         </View>
         </TouchableOpacity>

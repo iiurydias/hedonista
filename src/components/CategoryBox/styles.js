@@ -5,21 +5,21 @@ const styles = StyleSheet.create({
     margin: 8
   },
   FirstLevel:{
-    backgroundColor: '#603DEB',
+    backgroundColor: '#7049f9',
     width: 110,
     height: 150,
     borderRadius: 13,
     resizeMode: 'contain'
   },
   SecondLevel:{
-    backgroundColor: '#6746EC',
+    backgroundColor: '#7950ff',
     width: '90%',
     height: 150,
     borderRadius: 13,
     resizeMode: 'contain'
   },
   ThirdLevel:{
-    backgroundColor: '#7456ED',
+    backgroundColor: '#8157ff',
     width: '85%',
     height: 150,
     borderRadius: 13,

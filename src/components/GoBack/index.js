@@ -8,7 +8,7 @@ class GoBack extends Component {
     return (
       <View style={styles.Button}>
             <TouchableOpacity
-              activeOpacity={0.7}
+              activeOpacity={0.9}
               onPress={this.props.onPress}
               style={styles.Content}
             >

@@ -7,12 +7,15 @@ import Search from "../Search";
 import Directions from "../Directions";
 import Details from "../Details";
 import GoBack from "../GoBack";
+import MapMarker from "../MapMarker";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as destinationActions from "../../actions/destination";
 import * as durationActions from "../../actions/duration";
 import * as distanceActions from "../../actions/distance";
 import * as clickedActions from "../../actions/clicked";
+
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 class Map extends Component {
   state = {
@@ -50,14 +53,13 @@ class Map extends Component {
         });
       },
       () => {
-        Alert.alert("Erro", "Erro ao tentar atualizar localização");
       },
       {
-        timeout: 3000,
+        maximumAge: 5000,
         enableHighAccuracy: false
       }
     );
-    await navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         this.setState({
           //origin: {
@@ -78,15 +80,14 @@ class Map extends Component {
         });
       },
       (erro) => {
-        Alert.alert("Erro", "Erro ao tentar pegar localização " + JSON.stringify(erro));
+        Alert.alert("Erro", "Erro ao tentar pegar localização");
         this.setState({ zoomEnabled: false });
       },
       {
-        timeout: 3000,
+        timeout: 5000,
         enableHighAccuracy: false
       }
     );
-
   }
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchId);
@@ -95,9 +96,7 @@ class Map extends Component {
     this.setState({ tracksViewChanges: false });
   };
   onDirectionButtonPress = () => {
-
-    !this.props.destination &&
-      this.props.actions.destinationActions.setDestination({ latitude: this.state.pointLocation.latitude, longitude: this.state.pointLocation.longitude });
+    this.props.actions.destinationActions.setDestination({ latitude: this.state.pointLocation.latitude, longitude: this.state.pointLocation.longitude });
   };
 
   handleLocationSelected = (data, { geometry }) => {
@@ -144,8 +143,8 @@ class Map extends Component {
             toolbarEnabled={false}
             ref={el => (this.mapView = el)}
             onPress={() => {
-              this.props.clicked && 
-              this.props.actions.destinationActions.setDestination(null);
+              this.props.clicked &&
+                this.props.actions.destinationActions.setDestination(null);
               this.props.actions.durationActions.setDuration(null);
               this.props.actions.distanceActions.setDistance(null);
               this.props.actions.clickedActions.setClicked(false);
@@ -173,6 +172,15 @@ class Map extends Component {
                     }
                   }}
                 />
+                <Marker
+                    tracksViewChanges={tracksViewChanges}
+                    coordinate={{
+                      latitude: parseFloat(origin.latitude),
+                      longitude: parseFloat(origin.longitude)
+                    }}
+                  >
+                    <Icon name='child' size={30} color="#7049f9" />
+                  </Marker>
               </Fragment>
             )}
             {this.props.markers.map(
@@ -191,6 +199,7 @@ class Map extends Component {
                       longitude: parseFloat(p.longitude)
                     }}
                     onPress={() => {
+                      this.props.actions.destinationActions.setDestination(null);
                       this.setState({
                         region: {
                           latitude: parseFloat(p.latitude),
@@ -208,11 +217,9 @@ class Map extends Component {
                       this.props.actions.clickedActions.setClicked(true);
                     }}
                   >
-                    <Image
-                      source={this.props.markerImg}
-                      onLoad={this.stopRendering}
-                    />
+                    <MapMarker mounted={this.stopRendering} icon={this.props.icon} />
                   </Marker>
+
                 )
             )}
           </MapView>
@@ -225,7 +232,7 @@ class Map extends Component {
                 longitude: origin.longitude
               })
               this.props.clicked &&
-              this.props.actions.destinationActions.setDestination(null);
+                this.props.actions.destinationActions.setDestination(null);
               this.props.actions.durationActions.setDuration(null);
               this.props.actions.distanceActions.setDistance(null);
               this.props.actions.clickedActions.setClicked(false);
@@ -267,7 +274,7 @@ const mapStateToProps = state => ({
   destination: state.destination,
   duration: state.duration,
   distance: state.distance,
-  clicked: state.clicked,
+  clicked: state.clicked
 })
 
 function mapDispatchToProps(dispatch) {
@@ -280,7 +287,7 @@ function mapDispatchToProps(dispatch) {
       distanceActions:
         bindActionCreators(distanceActions, dispatch),
       clickedActions:
-        bindActionCreators(clickedActions, dispatch),
+        bindActionCreators(clickedActions, dispatch)
     }
   }
 }

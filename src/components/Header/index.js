@@ -14,7 +14,7 @@ class Header extends Component {
     return (
       <View>
         <View style={styles.container}>
-          <StatusBar backgroundColor="#623CEA" />
+          <StatusBar backgroundColor="#7049f9" />
           <View>
             {this.props.left}
           </View>

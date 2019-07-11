@@ -4,8 +4,7 @@ import { Provider } from "react-redux";
 import store from "../../store";
 import Header from "../../components/Header";
 import Reset from "../../components/Reset";
-import { View, Text } from "react-native";
-import markerImage from "../../assets/food-marker.png";
+import { View, Text, BackHandler } from "react-native";
 
 class Points extends Component {
   state= {
@@ -76,18 +75,20 @@ class Points extends Component {
       }
     ]
   }
+  
   render() {
+    const icon = this.props.navigation.getParam('icon');
     return (
       <Provider store={store}>
         <Header
-          left={<Reset navigate={() => this.props.navigation.goBack()} />}
+          left={<Reset navigate={() => this.props.navigation.goBack()} backHandler={BackHandler} />}
           center={
             <Text style={{ fontFamily: "MyriadPro", color: "#FFF" }}>
               LOCAIS COM COMIDA BARATA
             </Text>
           }
         />
-        <Map markers = {this.state.markers} markerImg={markerImage} />
+        <Map markers = {this.state.markers} icon={icon}/>
       </Provider>
     );
   }

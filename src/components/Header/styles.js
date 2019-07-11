@@ -8,9 +8,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-    backgroundColor: "#623CEA",
-    borderColor: "#623CEA",
-    borderBottomWidth: 2,
+    backgroundColor: "#7049f9",
   },
 
 });

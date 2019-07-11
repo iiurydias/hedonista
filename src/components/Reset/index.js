@@ -9,10 +9,22 @@ import * as distanceActions from "../../actions/distance";
 import * as clickedActions from "../../actions/clicked";
 
 class Reset extends Component {
+  componentDidMount(){
+    this.props.backHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+  handleBackPress = () => {
+    if (this.props.clicked) {
+      this.props.actions.destinationActions.setDestination(null),
+        this.props.actions.durationActions.setDuration(null),
+        this.props.actions.distanceActions.setDistance(null),
+        this.props.actions.clickedActions.setClicked(false)
+        return true
+    } else { this.props.navigate();  return true }
+  }
   render() {
     return (
       <TouchableOpacity
-        activeOpacity={0.7}
+        activeOpacity={0.9}
         onPress={() => {
           if (this.props.clicked) {
             this.props.actions.destinationActions.setDestination(null),
