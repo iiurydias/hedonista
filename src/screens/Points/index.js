@@ -72,6 +72,30 @@ class Points extends Component {
         latitude: -1.446776,
         longitude: -48.47239,
         hidden: false
+      },
+      {
+        key: 9,
+        name: "Sorveteria da mãe do Vinicius",
+        address: "Rua santo antônio, 58",
+        latitude: -11.088151,
+        longitude: -40.434080,
+        hidden: false
+      },
+      {
+        key: 10,
+        name: "Padaria do tio do Vinicius",
+        address: "Rua santo antônio, 58",
+        latitude: -11.089088,
+        longitude: -40.432020,
+        hidden: false
+      },
+      {
+        key: 9,
+        name: "Lanchonete da tia do Vinicius",
+        address: "Rua santo antônio, 58",
+        latitude: -11.090709,
+        longitude: -40.433146,
+        hidden: false
       }
     ]
   }
@@ -88,7 +112,7 @@ class Points extends Component {
             </Text>
           }
         />
-        <Map markers = {this.state.markers} icon={icon}/>
+        <Map markers = {this.state.markers} icon={icon} navigation={this.props.navigation}/>
       </Provider>
     );
   }

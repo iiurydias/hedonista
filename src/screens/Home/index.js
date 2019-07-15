@@ -57,11 +57,11 @@ class Home extends Component {
           </View>
           <View style={styles.FavoriteContainer}>
             <ScrollView style={styles.FavoriteBlock} showsVerticalScrollIndicator={false}>
-              <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
-              <FavoriteBlock icon='theater-masks' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
-              <FavoriteBlock icon='building' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
-              <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
-              <FavoriteBlock icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock navigation = {this.props.navigation} icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock navigation = {this.props.navigation} icon='theater-masks' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock navigation = {this.props.navigation} icon='building' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock navigation = {this.props.navigation} icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
+              <FavoriteBlock navigation = {this.props.navigation} icon='utensils' title='Lanchonete do seu Zé' address='Rua Antônio de Souza Gomes, 53' />
             </ScrollView>
           </View>
         </ScrollView>

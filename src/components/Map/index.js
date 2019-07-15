@@ -3,10 +3,11 @@ import MapViewDirections from "react-native-maps-directions";
 import { getDistanceFromLatLonInKm, getPixelSize } from "./utils";
 import { View, Alert, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import Search from "../Search";
+import styles from "./styles";
 import Directions from "../Directions";
 import Details from "../Details";
 import GoBack from "../GoBack";
+import Add from "../Add";
 import MapMarker from "../MapMarker";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -14,6 +15,7 @@ import * as destinationActions from "../../actions/destination";
 import * as durationActions from "../../actions/duration";
 import * as distanceActions from "../../actions/distance";
 import * as clickedActions from "../../actions/clicked";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -28,7 +30,8 @@ class Map extends Component {
     pointLocation: null,
     locationChanged: false,
     title: null,
-    address: null
+    address: null,
+    searchFocused: false
   };
   async componentDidMount() {
     this.watchId = navigator.geolocation.watchPosition(
@@ -127,9 +130,9 @@ class Map extends Component {
       pointLocation,
       locationChanged,
       title,
-      address
+      address,
+      searchFocused
     } = this.state;
-
     return (
       <Fragment>
         <View style={{ flex: 1 }}>
@@ -173,14 +176,14 @@ class Map extends Component {
                   }}
                 />
                 <Marker
-                    tracksViewChanges={tracksViewChanges}
-                    coordinate={{
-                      latitude: parseFloat(origin.latitude),
-                      longitude: parseFloat(origin.longitude)
-                    }}
-                  >
-                    <Icon name='child' size={30} color="#7049f9" />
-                  </Marker>
+                  tracksViewChanges={tracksViewChanges}
+                  coordinate={{
+                    latitude: parseFloat(origin.latitude),
+                    longitude: parseFloat(origin.longitude)
+                  }}
+                >
+                  <Icon name='child' size={30} color="#7049f9" />
+                </Marker>
               </Fragment>
             )}
             {this.props.markers.map(
@@ -223,8 +226,9 @@ class Map extends Component {
                 )
             )}
           </MapView>
-          {locationChanged &&
+          {locationChanged ?
             <GoBack onPress={() => {
+              this.googlePlacesAutocomplete._handleChangeText('');
               this.setState({
                 locationChanged: false,
                 region: origin,
@@ -239,7 +243,12 @@ class Map extends Component {
             }
             }
             />
+            :
+            <View style={{ alignItems: 'flex-end' }}>
+              <Add onPress={()=>{this.props.navigation.navigate('NewPoint')}}/>
+            </View>
           }
+
           {this.props.clicked ? (
             <Fragment>
               <MapViewDirections
@@ -258,12 +267,33 @@ class Map extends Component {
                   distance={this.props.distance}
                   duration={this.props.duration}
                   onDirectionButtonPress={this.onDirectionButtonPress}
+                  navigation={this.props.navigation}
                 />
               )}
             </Fragment>
           ) : (
               origin &&
-              <Search onLocationSelected={this.handleLocationSelected} />
+              <GooglePlacesAutocomplete
+                placeholder="Mudar localização?"
+                placeholderTextColor="#333"
+                ref={c => this.googlePlacesAutocomplete = c}
+                onPress={this.handleLocationSelected}
+                query={{
+                  key: "AIzaSyA-H7zGSuNzyCZDW5pPeegOgykilPgmMug",
+                  language: "pt",
+                  components: 'country:br'
+                }}
+                textInputProps={{
+                  onFocus: () => { this.setState({ searchFocused: true }) },
+                  onBlur: () => { this.setState({ searchFocused: false }) },
+                  autoCapitalize: "none",
+                  autoCorrect: false
+                }}
+                listViewDisplayed={searchFocused}
+                fetchDetails
+                enablePoweredByContainer={false}
+                styles={styles}
+              />
             )}
         </View>
       </Fragment>

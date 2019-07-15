@@ -2,22 +2,23 @@ import { StyleSheet, Dimensions } from "react-native";
 
 const { width: WIDTH } = Dimensions.get('window')
 const styles = StyleSheet.create({
-  Container: {
+  MainContainer: {
     //backgroundColor: '#7049f9',
     height: '100%',
-    flex: 1
+    //flex: 1
   },
   inputContainer: {
     width: WIDTH - 70,
     borderBottomWidth: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    margin: 15
+    margin: 15,
+    //backgroundColor: 'blue',
   },
   input: {
     fontFamily: "MyriadPro",
     width: '90%',
-    //backgroundColor: '#FFF',
+    //backgroundColor: 'red',
     //borderRadius: 20,
     padding: 10,
     paddingLeft: 20,
@@ -71,15 +72,68 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-end",
   },
-  eyeBtn: {
-    //backgroundColor: 'white',
-    width: '15%',
-    justifyContent: "center",
-    alignItems: "center",
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
-    paddingRight: 20
-  }
+  autocomplete:{
+    //flex: 1,
+    width: WIDTH - 70,
+    margin: 15,
+    //backgroundColor: 'red'
+  },
+  Map:{
+    width: WIDTH - 70,
+    height: 250,
+  },
+  container: {
+    borderWidth: 0,
+    //backgroundColor: 'red',
+
+  // flex: 1,
+    //width: '100%',
+    //padding: 25,
+    //paddingLeft: 20,
+  },
+  textInputContainer: {
+  
+    backgroundColor: 'transparent',
+    borderBottomWidth: 1,
+    borderColor: "#FFF",
+    paddingRight: 10,
+
+    //height: 45,
+    //marginHorizontal: 20,
+    //borderTopWidth: 0,
+    //borderBottomWidth: 0,
+    //width: '100%',
+  },
+  textInput: {
+    backgroundColor: 'transparent',
+    fontFamily: "MyriadPro",
+    color: '#FFF',
+    fontSize: 13,
+    
+  },
+  listView: {
+    borderBottomWidth: 1,
+    borderColor: "#DDD",
+    backgroundColor: "#FFF",
+    opacity: 0.5,
+    //marginHorizontal: 20,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { x: 0, y: 0 },
+    shadowRadius: 15,
+    margin: 7,
+    paddingRight: 10
+  },
+  description: {
+    fontFamily: "MyriadPro",
+    //fontSize: 13,
+    color: "#000"
+  },
+  row: {
+    padding: 13,
+    height: 51
+  },
 });
 
 export default styles;

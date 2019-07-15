@@ -33,7 +33,6 @@ class Reset extends Component {
               this.props.actions.clickedActions.setClicked(false)
           } else { this.props.navigate() }
         }}
-        style={{ paddingLeft: 10, paddingRight: 10 }}
       >
         <Icon name="arrow-left" color="#fff" size={25} />
       </TouchableOpacity>

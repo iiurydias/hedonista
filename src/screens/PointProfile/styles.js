@@ -105,45 +105,30 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    fontSize: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    fontSize: 12,
     fontFamily: "MyriadPro",
     color: '#525252'
   },
-  ButtonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    //paddingRight: 30,
-  },
   ButtonBox: {
-    width: '20%',
+    width: '10%',
     justifyContent: "flex-end",
-    alignItems: "flex-end"
-  },
-  Button2: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    backgroundColor: "#623CEA"
+    alignItems: "flex-start",
+    paddingLeft: 10,
+    paddingBottom: 10
   },
   BottomContainer: {
     width: '100%',
     padding: 20,
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
-    borderRadius: 20
+  
+    borderTopWidth: 1,
+    borderColor: "#e0e0e0"
   },
   InputContainer: {
-    width: '80%',
+    width: '90%',
     justifyContent: "flex-end",
 
   }

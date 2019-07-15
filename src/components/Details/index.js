@@ -14,7 +14,7 @@ export default class Details extends Component {
           </View>
           <View style={styles.ArrowContainer}>
                 <TouchableOpacity
-                  onPress={this.props.onDirectionButtonPress}
+                  onPress={()=>{this.props.navigation.navigate('PointProfile')}}
                 >
                   <Icon name="chevron-right" size={30} color="#171D33" />
                 </TouchableOpacity>

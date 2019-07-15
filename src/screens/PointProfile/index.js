@@ -3,10 +3,10 @@ import styles from "./styles";
 import Header from "../../components/Header";
 import MapMarker from "../../components/MapMarker";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { Icon as IconElements }  from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import MapView, { Marker } from "react-native-maps";
 import CommentBlock from "../../components/CommentBlock";
-const { width: WIDTH } = Dimensions.get('window')
 
 class PointProfile extends Component {
   state = {
@@ -19,19 +19,19 @@ class PointProfile extends Component {
       comments: [{
         id: 1,
         author: 'Iury Dias',
-        comment: 'Amei esse local, muito maravilho, pretendo vir mais vezes com certeza!',
+        comment: 'Amei esse local, muito bom, pretendo vir mais vezes com certeza!',
         date: '2019-07-06T12:33Z',
         gender: 'male'
       }, {
         id: 2,
         author: 'Mariana Novaes',
-        comment: 'Amei esse local, muito maravilho, pretendo vir mais vezes com certeza!',
+        comment: 'Amei esse local, muito bom, pretendo vir mais vezes com certeza!',
         date: '2019-07-06T12:33Z',
         gender: 'female'
       }, {
         id: 3,
         author: 'Iury Dias',
-        comment: 'Amei esse local, muito maravilho, pretendo vir mais vezes com certeza!',
+        comment: 'Amei esse local, muito bom, pretendo vir mais vezes com certeza!',
         date: '2019-07-06T12:33Z',
         gender: 'male'
       },
@@ -41,6 +41,7 @@ class PointProfile extends Component {
     return (
       <Fragment>
         <Header
+          left={<TouchableOpacity activeOpacity={0.7} onPress={() => this.props.navigation.goBack()} ><Icon name="arrow-left" color="#fff" size={25} /></TouchableOpacity>}
           center={
             <Text style={{ fontFamily: "MyriadPro", color: "#FFF" }}>
               PONTO
@@ -87,7 +88,7 @@ class PointProfile extends Component {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { }}>
                   <View style={styles.SmallCircle}>
-                    <Icon raised name='heartbeat' size={15} color='white' />
+                    <IconElements name="heart" iconStyle={{color: "white"}} type="font-awesome" size={12} />
                   </View>
                   <Text numberOfLines={1} style={styles.btnTxt}>Favoritar</Text>
                 </TouchableOpacity>
@@ -97,8 +98,8 @@ class PointProfile extends Component {
           </View>
           <View style={styles.Comments}>
             <Text style={styles.H1}>Referências</Text>
-            <View style={{ padding: 20, paddingTop: 0, flex: 1 }}>
-              <ScrollView style={styles.FavoriteBlock} showsVerticalScrollIndicator={false}>
+            <View style={{ flex: 1 }}>
+              <ScrollView style={{ padding: 20, paddingTop: 0} } showsVerticalScrollIndicator={false}>
                 {this.state.comments.length != [] ? this.state.comments.map(
                   p =>
                     <CommentBlock key={p.id} author={p.author} comment={p.comment} date={p.date} gender={p.gender} />
@@ -106,28 +107,22 @@ class PointProfile extends Component {
                 <Text> Nenhum comentário</Text>
                 }
               </ScrollView>
-              <Text style={[styles.H1, { marginLeft: 0, margin: 10, fontSize: 13 }]}>Deixar referência:</Text>
-
               <View style={styles.BottomContainer}>
                 <View style={styles.InputContainer}>
                   <TextInput
                     multiline={true}
-                    maxHeight={100}
+                    maxHeight={60}
                     style={styles.InputComment}
                     onChangeText={(text) => { }}
                   />
                 </View>
-                <View style={styles.ButtonBox}>
-                  <View style={styles.ButtonContainer}>
                     <TouchableOpacity
                       activeOpacity={0.9}
-                      style={styles.Button2}
+                      style={styles.ButtonBox}
                       onPress={this.props.onDirectionButtonPress}
                     >
-                      <Icon name="paper-plane" size={20} color="#FFF" />
+                      <IconElements name="paper-plane" type="font-awesome" size={20} iconStyle={{color: "#623CEA"}} />
                     </TouchableOpacity>
-                  </View>
-                </View>
               </View>
             </View>
           </View>

@@ -8,13 +8,16 @@ import Home from "./screens/Home";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import PointProfile from "./screens/PointProfile";
+import NewPoint from "./screens/NewPoint";
 
 const AppNavigator = createStackNavigator(
   {
-    Home: PointProfile,
+    Home: Login,
     Register: Register,
     HomeScreen: Home,
     Points: Points,
+    PointProfile: PointProfile,
+    NewPoint: NewPoint
   },
   {
     headerMode: 'none',

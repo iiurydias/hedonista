@@ -3,11 +3,8 @@ import { StyleSheet,Dimensions } from "react-native";
 const {width: WIDTH} = Dimensions.get('window')
 const styles = StyleSheet.create({
   Container:{
-    backgroundColor: '#7049f9',
     height: '100%',
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   inputContainer:{
     width: WIDTH - 70,

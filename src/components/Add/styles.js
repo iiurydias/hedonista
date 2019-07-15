@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     bottom: 0,
     margin: 15,
+    paddingRight: 15,
     flex: 1,
     shadowColor: "#000",
     shadowOffset: {
@@ -20,9 +21,9 @@ const styles = StyleSheet.create({
   Content:{
     justifyContent: "center",
     alignItems: "center",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: "#623CEA"
   }
 });
