@@ -1,15 +1,14 @@
 import React, { Component, Fragment } from "react";
 import styles from "./styles";
-import { View, Text, TextInput, TouchableOpacity, Dimensions, Picker, ScrollView, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, Picker, ScrollView, BackHandler } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import LinearGradient from 'react-native-linear-gradient'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import GeoCoder from 'react-native-geocoding'
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import MapMarker from "../../components/MapMarker";
 
 GeoCoder.init('AIzaSyA-H7zGSuNzyCZDW5pPeegOgykilPgmMug')
-
 class NewPoint extends Component {
   state = {
     name: '',
@@ -83,13 +82,21 @@ class NewPoint extends Component {
   }
   handleNameFocus = () => this.setState({ nameFocused: true })
   handleNameBlur = () => this.setState({ nameFocused: false })
-  async componentDidMount() {
-    await GeoCoder.from(this.state.myLocation).then((response) => {
+   async componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+     GeoCoder.from(this.state.myLocation).then((response) => {
       const address = response.results[0].formatted_address;
       this.setState({ myCurrentAddress: address })
     }).catch(() => {
       this.setState({ myCurrentAddress: "Erro ao pegar seu endereço atual" })
     });
+  }
+  handleBackPress = ()=>{
+    this.props.navigation.goBack();
+    return true
+  }
+  componentWillUnmount(){
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
   onRegionChange = (region) => {
     this.setState({ myLocation2: region })
@@ -102,7 +109,8 @@ class NewPoint extends Component {
   }
   render() {
     const { width: WIDTH } = Dimensions.get('window')
-    const searchFocused = this.state.searchFocused
+    const searchFocused = this.state.searchFocused;
+
     return (
       <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.MainContainer} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
@@ -189,7 +197,7 @@ class NewPoint extends Component {
                     onRegionChangeComplete={this.onRegionChange}
                   />
                   <View style={{ position: 'absolute', left: [(WIDTH - 70) / 2] - 25, top: (250 / 2) - 70 }}>
-                    <MapMarker mounted={() => { }} icon='utensils'></MapMarker>
+                    <MapMarker mounted={() => { }} icon='globe-americas'></MapMarker>
                   </View>
                 </View>
               </Fragment>

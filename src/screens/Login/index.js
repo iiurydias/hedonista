@@ -3,7 +3,12 @@ import styles from "./styles";
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from "react-native-vector-icons/FontAwesome5";
+import {NavigationActions, StackActions} from "react-navigation";
 
+const resetAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'HomeScreen' })],
+});
 class Login extends Component {
   state = {
     showPass: true,
@@ -64,7 +69,9 @@ class Login extends Component {
           </View>
           <View style={styles.bottomContainer}>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { this.props.navigation.navigate('HomeScreen') }}>
+              <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { 
+              this.props.navigation.dispatch(resetAction); 
+              this.props.navigation.navigate('HomeScreen') }}>
                 <Text style={styles.btnTxt}>Entrar</Text>
               </TouchableOpacity>
             </View>

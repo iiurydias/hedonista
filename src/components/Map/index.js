@@ -226,7 +226,7 @@ class Map extends Component {
                 )
             )}
           </MapView>
-          {locationChanged ?
+          {(locationChanged && !this.props.clicked) &&
             <GoBack onPress={() => {
               this.googlePlacesAutocomplete._handleChangeText('');
               this.setState({
@@ -243,9 +243,10 @@ class Map extends Component {
             }
             }
             />
-            :
+          }
+          {!locationChanged && 
             <View style={{ alignItems: 'flex-end' }}>
-              <Add onPress={()=>{this.props.navigation.navigate('NewPoint')}}/>
+              <Add onPress={() => { this.props.navigation.navigate('NewPoint') }} />
             </View>
           }
 
@@ -267,7 +268,7 @@ class Map extends Component {
                   distance={this.props.distance}
                   duration={this.props.duration}
                   onDirectionButtonPress={this.onDirectionButtonPress}
-                  navigation={this.props.navigation}
+                  onPress={() => { this.props.navigation.navigate('PointProfile',{navigation:this.props.navigation}) }}
                 />
               )}
             </Fragment>

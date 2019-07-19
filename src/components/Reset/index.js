@@ -19,7 +19,10 @@ class Reset extends Component {
         this.props.actions.distanceActions.setDistance(null),
         this.props.actions.clickedActions.setClicked(false)
         return true
-    } else { this.props.navigate();  return true }
+    } else { this.props.navigation.goBack();  return true }
+  }
+  componentWillUnmount(){
+    this.props.backHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
   render() {
     return (

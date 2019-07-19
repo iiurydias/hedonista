@@ -7,14 +7,14 @@ class Add extends Component {
   render() {
     return (
       <View style={styles.Button}>
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={this.props.onPress}
-              style={styles.Content}
-            >
-              <Icon name="plus" size={35} color="#FFF"/>
-            </TouchableOpacity>
-          </View>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={this.props.onPress}
+          style={styles.Content}
+        >
+          <Icon name="plus" size={35} color="#FFF" />
+        </TouchableOpacity>
+      </View>
     );
   }
 }

@@ -5,7 +5,9 @@ const styles = StyleSheet.create({
   Container: {
     //backgroundColor: '#7049f9',
     height: '100%',
-    flex: 1
+    flex: 1,
+    marginBottom: 20,
+    marginTop: 20
   },
   inputContainer: {
     width: WIDTH - 70,

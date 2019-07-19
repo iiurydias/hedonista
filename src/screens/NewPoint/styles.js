@@ -5,6 +5,8 @@ const styles = StyleSheet.create({
   MainContainer: {
     //backgroundColor: '#7049f9',
     height: '100%',
+    marginBottom: 20,
+    marginTop: 20
     //flex: 1
   },
   inputContainer: {

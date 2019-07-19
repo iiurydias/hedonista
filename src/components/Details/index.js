@@ -13,12 +13,12 @@ export default class Details extends Component {
             <Text style={styles.Address} numberOfLines={1}>{this.props.address}</Text>
           </View>
           <View style={styles.ArrowContainer}>
-                <TouchableOpacity
-                  onPress={()=>{this.props.navigation.navigate('PointProfile')}}
-                >
-                  <Icon name="chevron-right" size={30} color="#171D33" />
-                </TouchableOpacity>
-              </View>
+            <TouchableOpacity
+              onPress={this.props.onPress}
+            >
+              <Icon name="chevron-right" size={30} color="#171D33" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.InfoContainer}>
           <View style={styles.Details}>

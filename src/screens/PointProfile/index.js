@@ -2,11 +2,12 @@ import React, { Component, Fragment } from "react";
 import styles from "./styles";
 import Header from "../../components/Header";
 import MapMarker from "../../components/MapMarker";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, BackHandler } from "react-native";
 import { Icon as IconElements }  from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import MapView, { Marker } from "react-native-maps";
 import CommentBlock from "../../components/CommentBlock";
+
 
 class PointProfile extends Component {
   state = {
@@ -37,11 +38,22 @@ class PointProfile extends Component {
       },
       ]
   }
+  componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+  handleBackPress = ()=>{
+    this.props.navigation.goBack();
+    return true
+  }
+  componentWillUnmount(){
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+  }
   render() {
+    
     return (
       <Fragment>
         <Header
-          left={<TouchableOpacity activeOpacity={0.7} onPress={() => this.props.navigation.goBack()} ><Icon name="arrow-left" color="#fff" size={25} /></TouchableOpacity>}
+          left={<TouchableOpacity activeOpacity={0.7} onPress={this.handleBackPress} ><Icon name="arrow-left" color="#fff" size={25} /></TouchableOpacity>}
           center={
             <Text style={{ fontFamily: "MyriadPro", color: "#FFF" }}>
               PONTO

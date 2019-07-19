@@ -99,13 +99,13 @@ class Points extends Component {
       }
     ]
   }
-  
   render() {
     const icon = this.props.navigation.getParam('icon');
+
     return (
       <Provider store={store}>
         <Header
-          left={<Reset navigate={() => this.props.navigation.goBack()} backHandler={BackHandler} />}
+          left={<Reset navigation={this.props.navigation} navigate={() => this.props.navigation.goBack()} backHandler={BackHandler} />}
           center={
             <Text style={{ fontFamily: "MyriadPro", color: "#FFF" }}>
               LOCAIS COM COMIDA BARATA
