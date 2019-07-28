@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   Title: {
     fontFamily: "MyriadPro",
     fontSize: 20,
-    color: "#171D33"
+    color: "#623CEA"
   },
   Address: {
     fontFamily: "MyriadPro",

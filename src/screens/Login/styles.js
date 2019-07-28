@@ -80,6 +80,12 @@ const styles = StyleSheet.create({
     color: '#FFF',
     padding: 10,
   },
+  invalid:{
+    fontFamily: "MyriadPro",
+    fontSize: 15,
+    color: '#d64541',
+    padding: 10,
+  },
   buttonContainer:{
     width: WIDTH - 55,
     marginTop: 25

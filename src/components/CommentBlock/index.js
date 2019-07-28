@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import styles from "./styles";
 import { View, Text, Image } from "react-native";
-import girl from '../../assets/girl.png'
-import man from '../../assets/man.png'
 
 export default class CommentBlock extends Component {
   state = {
@@ -14,11 +12,11 @@ export default class CommentBlock extends Component {
   componentDidMount() {
     let author = '@' + this.props.author.replace(' ', '').toLowerCase();
     let comment = '"' + this.props.comment + '"';
-    let date = this.formatar(this.props.date);
+    let date = this.format(this.props.date);
     let gender = this.props.gender;
     this.setState({ author: author, comment: comment, date: date, gender: gender });
   }
-  formatar(date) {
+  format(date) {
     var data = date;
     data = new Date(data);
     var day = data.getDay();
@@ -30,10 +28,7 @@ export default class CommentBlock extends Component {
     return (
       <View>
         <View style={styles.Container}>
-          <View style={styles.IconContainer}>
-            <Image style={styles.icon} source={this.props.gender == 'male' ? man : girl} />
-          </View>
-          <View style={styles.InfoContainer} >
+          <View >
             <View >
               <Text style={styles.Author} numberOfLines={1}>{this.state.author}</Text>
               <Text style={styles.Comment} numberOfLines={2}>{this.state.comment}</Text>

@@ -19,14 +19,32 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "MyriadPro",
     width: '90%',
+    color: '#FFF',
     //backgroundColor: '#FFF',
     //borderRadius: 20,
     padding: 10,
     paddingLeft: 20,
     opacity: 0.7
   },
+  nameContainer:{
+    flexDirection: 'row', 
+    width: '45%',
+    borderBottomWidth: 1
+  },
+  inputName: {
+    fontFamily: "MyriadPro",
+    width: '80%',
+    padding: 10,
+    paddingLeft: 20,
+    opacity: 0.7
+  },
   inputIcon: {
     width: '10%',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  inputIconName:{
+    width: '20%',
     justifyContent: "center",
     alignItems: "center",
   },

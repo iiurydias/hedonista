@@ -16,7 +16,7 @@ export default class Details extends Component {
             <TouchableOpacity
               onPress={this.props.onPress}
             >
-              <Icon name="chevron-right" size={30} color="#171D33" />
+              <Icon name="chevron-right" size={30} color="#623CEA" />
             </TouchableOpacity>
           </View>
         </View>

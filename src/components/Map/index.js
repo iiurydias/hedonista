@@ -34,7 +34,7 @@ class Map extends Component {
     searchFocused: false
   };
   async componentDidMount() {
-    this.watchId = navigator.geolocation.watchPosition(
+    this.watchId = await navigator.geolocation.watchPosition(
       position => {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
@@ -82,7 +82,7 @@ class Map extends Component {
           zoomEnabled: true
         });
       },
-      (erro) => {
+      () => {
         Alert.alert("Erro", "Erro ao tentar pegar localização");
         this.setState({ zoomEnabled: false });
       },
@@ -212,7 +212,8 @@ class Map extends Component {
                         },
                         pointLocation: {
                           latitude: parseFloat(p.latitude),
-                          longitude: parseFloat(p.longitude)
+                          longitude: parseFloat(p.longitude),
+                          key: p.key
                         },
                         title: p.name,
                         address: p.address
@@ -268,7 +269,16 @@ class Map extends Component {
                   distance={this.props.distance}
                   duration={this.props.duration}
                   onDirectionButtonPress={this.onDirectionButtonPress}
-                  onPress={() => { this.props.navigation.navigate('PointProfile',{navigation:this.props.navigation}) }}
+                  onPress={() => { this.props.navigation.navigate('PointProfile',
+                    {
+                      latitude: this.state.pointLocation.latitude,
+                      longitude: this.state.pointLocation.longitude,
+                      duration: this.props.duration,
+                      distance: this.props.distance,
+                      title: title,
+                      address: address,
+                      navigationWithData: true
+                    }) }}
                 />
               )}
             </Fragment>

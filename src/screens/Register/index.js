@@ -7,15 +7,17 @@ import LinearGradient from 'react-native-linear-gradient'
 class Register extends Component {
   state = {
     name: '',
+    lastName: '',
     email: '',
     pass: '',
     confirmPass: '',
-    gender: 'masculino',
     missName: false,
+    missLastName: false,
     missEmail: false,
     missPass: false,
     missConfirmPass: false,
     nameFocused: false,
+    lastNameFocused: false,
     emailFocused: false,
     passFocused: false,
     confirmPassFocused: false,
@@ -45,15 +47,26 @@ class Register extends Component {
     }
   }
   validateName = () => {
-    if (this.state.name === '' || (this.state.name.length) < 2) {
+    if (this.state.name === '' || (this.state.name.length) < 2 || this.state.name.includes(" ")) {
       this.setState({ missName: true })
     } else {
       this.setState({ missName: false })
     }
   }
+  validateLastName = () => {
+    if (this.state.lastName === '' || (this.state.lastName.length) < 2 || this.state.lastName.includes(" ")) {
+      this.setState({ missLastName: true })
+    } else {
+      this.setState({ missLastName: false })
+    }
+  }
   setName = (text) => {
     this.setState({ missName: false })
     this.setState({ name: text });
+  }
+  setLastName = (text) => {
+    this.setState({ missLastName: false })
+    this.setState({ lastName: text });
   }
   setEmail = (text) => {
     this.setState({ missEmail: false })
@@ -68,6 +81,7 @@ class Register extends Component {
     this.setState({ confirmPass: text });
   }
   validation = () => {
+    this.setState({ lastNameFocused: false })
     this.setState({ nameFocused: false })
     this.setState({ emailFocused: false })
     this.setState({ passFocused: false })
@@ -75,9 +89,12 @@ class Register extends Component {
     this.validateName();
     this.validateEmail();
     this.comparePasses();
+    this.validateLastName();
   }
   handleNameFocus = () => this.setState({ nameFocused: true })
   handleNameBlur = () => this.setState({ nameFocused: false })
+  handleLastNameFocus = () => this.setState({ lastNameFocused: true })
+  handleLastNameBlur = () => this.setState({ lastNameFocused: false })
   handleEmailFocus = () => this.setState({ emailFocused: true })
   handleEmailBlur = () => this.setState({ emailFocused: false })
   handlePassFocus = () => this.setState({ passFocused: true })
@@ -88,24 +105,39 @@ class Register extends Component {
     const { width: WIDTH } = Dimensions.get('window')
     return (
       <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
+        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <View style={styles.logoContainer}>
               <Icon name='user-alt' size={WIDTH * 0.08} color="#FFF" />
             </View>
-            <View style={[styles.inputContainer, this.state.nameFocused ? { borderBottomColor: '#FFF' } : (this.state.missName ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#AAA' })]}>
-              <View style={[styles.inputIcon, this.state.nameFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
-                <Icon name='user-alt' size={20} color={this.state.nameFocused ? '#FFF' : this.state.missName ? '#ff4349' : '#FFF'} />
+            <View style={{ flexDirection: 'row', width: WIDTH - 70, justifyContent: 'space-between' }}>
+              <View style={[styles.nameContainer, this.state.nameFocused ? { borderBottomColor: '#FFF' } : (this.state.missName ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#AAA' })]}>
+                <View style={[styles.inputIconName, this.state.nameFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
+                  <Icon name='user-alt' size={20} color={this.state.nameFocused ? '#FFF' : this.state.missName ? '#ff4349' : '#FFF'} />
+                </View>
+                <TextInput
+                  onFocus={this.handleNameFocus}
+                  onBlur={this.handleNameBlur}
+                  style={[styles.inputName, this.state.nameFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missName ? { color: '#ff4349' } : { color: '#FFF' }))]}
+                  placeholder='Nome'
+                  value={this.state.name}
+                  maxLength={30}
+                  placeholderTextColor={this.state.nameFocused ? '#FFF' : this.state.missName ? '#ff4349' : '#FFF'}
+                  onChangeText={this.setName}
+                />
               </View>
-              <TextInput
-                onFocus={this.handleNameFocus}
-                onBlur={this.handleNameBlur}
-                style={[styles.input, this.state.nameFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missName ? { color: '#ff4349' } : { color: '#FFF' }))]}
-                placeholder='Nome'
-                maxLength={30}
-                placeholderTextColor={this.state.nameFocused ? '#FFF' : this.state.missName ? '#ff4349' : '#FFF'}
-                onChangeText={this.setName}
-              />
+              <View style={[{ width: '45%', borderBottomWidth: 1 }, this.state.lastNameFocused ? { borderBottomColor: '#FFF' } : (this.state.missLastName ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#AAA' })]}>
+                <TextInput
+                  onFocus={this.handleLastNameFocus}
+                  onBlur={this.handleLastNameBlur}
+                  style={[styles.input, { width: '100%' }, this.state.lastNameFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missLastName ? { color: '#ff4349' } : { color: '#FFF' }))]}
+                  placeholder='Sobrenome'
+                  value={this.state.lastName}
+                  maxLength={30}
+                  placeholderTextColor={this.state.lastNameFocused ? '#FFF' : this.state.missLastName ? '#ff4349' : '#FFF'}
+                  onChangeText={this.setLastName}
+                />
+              </View>
             </View>
             <View style={[styles.inputContainer, this.state.emailFocused ? { borderBottomColor: '#FFF' } : (this.state.missEmail ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#AAA' })]}>
               <View style={[styles.inputIcon, this.state.emailFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
@@ -115,30 +147,11 @@ class Register extends Component {
                 onFocus={this.handleEmailFocus}
                 onBlur={this.handleEmailBlur}
                 style={[styles.input, this.state.emailFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missEmail ? { color: '#ff4349' } : { color: '#FFF' }))]}
+                value={this.state.email}
                 placeholder='Email'
                 placeholderTextColor={this.state.emailFocused ? '#FFF' : this.state.missEmail ? '#ff4349' : '#FFF'}
                 onChangeText={this.setEmail}
               />
-            </View>
-            <View style={[styles.inputContainer, { borderBottomColor: '#AAA' }]}>
-              <View style={[styles.inputIcon, { opacity: 0.5 }]}>
-                <Icon name='male' size={22} color={'#FFF'} />
-              </View>
-              <Picker
-                selectedValue={this.state.gender}
-                style={[styles.input, {
-                  color: '#FFF', fontFamily: "MyriadPro", fontSize: 15, marginLeft: -20, transform: [
-                    { scaleX: 0.8 },
-                    { scaleY: 0.8 },
-                  ]
-                }]}
-
-                onValueChange={(itemValue) =>
-                  this.setState({ gender: itemValue })
-                }>
-                <Picker.Item label="Masculino" value="masculino" />
-                <Picker.Item label="Feminino" value="feminino" />
-              </Picker>
             </View>
             <View style={[styles.inputContainer, this.state.passFocused ? { borderBottomColor: '#FFF' } : (this.state.missPass ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#AAA' })]}>
               <View style={[styles.inputIcon, this.state.passFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
@@ -178,7 +191,7 @@ class Register extends Component {
               </View>
               <Text style={styles.createAccountTxt} >ou</Text>
               <View style={styles.createAccountContainer}>
-                <TouchableOpacity activeOpacity={0.9} onPress={() => { this.props.navigation.navigate('Home') }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => { this.props.navigation.goBack() }}>
                   <Text style={styles.createAccountTxt}>Entrar</Text>
                 </TouchableOpacity>
               </View>

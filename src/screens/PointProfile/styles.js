@@ -2,15 +2,13 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   Container: {
-    height: '100%',
-    backgroundColor: '#7049f9',
-    flex: 1
+    backgroundColor: '#7049f9'
   },
   Map: {
-    height: '20%',
+    height: 130,
   },
   Info: {
-    height: '20%',
+    //height: '20%',
     top: -20,
     backgroundColor: '#7049f9',
     borderTopStartRadius: 20,
@@ -18,10 +16,14 @@ const styles = StyleSheet.create({
 
   },
   Comments: {
-    height: '60%',
+    flexGrow: 1,
+    padding: 10,
+    paddingBottom: 0,
+    //height: '60%',
+    //flex: 1,
     backgroundColor: '#EEE',
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
   },
   Title: {
     fontSize: 20,
@@ -44,11 +46,11 @@ const styles = StyleSheet.create({
     color: "white"
   },
   MainInfo: {
-    height: '50%',
+    //height: '50%',
     padding: 20
   },
   Metrics: {
-    height: '50%',
+    //height: '50%',
     flexDirection: 'row',
     width: '100%'
   },
@@ -116,21 +118,19 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-start",
     paddingLeft: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   BottomContainer: {
     width: '100%',
     padding: 20,
     backgroundColor: '#FFF',
     flexDirection: 'row',
-  
-    borderTopWidth: 1,
-    borderColor: "#e0e0e0"
+    borderTopWidth: 1, 
+    borderColor: '#b7b7b7'
   },
   InputContainer: {
     width: '90%',
     justifyContent: "flex-end",
-
   }
 });
 

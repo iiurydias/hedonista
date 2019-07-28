@@ -16,10 +16,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
-    padding: 20,
+    padding: 15,
+    //paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
-    flexDirection: 'row',
+    alignItems: "center",
     flexWrap: 'wrap'
   },
   Author: {
@@ -41,21 +42,21 @@ const styles = StyleSheet.create({
   },
   InfoContainer:{
     width: '80%',
-    paddingLeft: 10
+    //paddingLeft: 10
   },
-  IconContainer:{
-    width: '20%',
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 5
-  },
-  icon:{
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-    position: "absolute",
-    zIndex: 9999
-  },
+  //IconContainer:{
+   // width: '20%',
+   // justifyContent: "center",
+   // alignItems: "center",
+   // padding: 5
+  //},
+ // icon:{
+   // width: "100%",
+    //height: "100%",
+   // resizeMode: "contain",
+    //position: "absolute",
+   // zIndex: 9999
+  //},
 });
 
 export default styles;

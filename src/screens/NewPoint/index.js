@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import styles from "./styles";
-import { View, Text, TextInput, TouchableOpacity, Dimensions, Picker, ScrollView, BackHandler } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, Alert, Picker, ScrollView, BackHandler } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import LinearGradient from 'react-native-linear-gradient'
+import Header from "../../components/Header";
+
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import GeoCoder from 'react-native-geocoding'
 import MapView from "react-native-maps";
@@ -47,11 +49,12 @@ class NewPoint extends Component {
   validation = () => {
     this.setState({ nameFocused: false })
     this.validateName();
-    this.validateEmail();
-    this.comparePasses();
+    if (this.state.myCurrentAddress == ""){
+      Alert.alert("Erro", "Selecione um endereço válido")
+    }
   }
-  handleLocationSelected = (data, { geometry }) => {
-    this.setState({ clearButtonEnabled: true })
+  handleLocationSelected = (data, { geometry }) =>  {
+    this.setState({ myCurrentAddress: data.description, clearButtonEnabled: true })
   }
   clearInput = () => {
     this.setState({ clearButtonEnabled: false })
@@ -62,22 +65,27 @@ class NewPoint extends Component {
     this.setState({ clearButtonEnabled: false })
     switch (itemValue) {
       case 'type_address':
-        this.setState({ typeAddressEnabled: true })
-        this.setState({ markCurrentLocationEnabled: false })
-        this.setState({ markOnMapEnabled: false })
+        this.setState({ typeAddressEnabled: true });
+        this.setState({ markCurrentLocationEnabled: false });
+        this.setState({ markOnMapEnabled: false });
+        this.setState({ myCurrentAddress: "" });
         break;
       case 'current_location':
-        this.setState({ typeAddressEnabled: false })
-        this.setState({ markCurrentLocationEnabled: true })
-        this.setState({ markOnMapEnabled: false })
+        this.setState({ typeAddressEnabled: false });
+        this.setState({ markCurrentLocationEnabled: true });
+        this.setState({ markOnMapEnabled: false });
+        this.setState({ myCurrentAddress: "" });
         break;
       case 'mark_on_map':
-        this.setState({ typeAddressEnabled: false })
-        this.setState({ markCurrentLocationEnabled: false })
-        this.setState({ markOnMapEnabled: true })
+        this.setState({ typeAddressEnabled: false });
+        this.setState({ markCurrentLocationEnabled: false });
+        this.setState({ markOnMapEnabled: true });
+        this.setState({ myCurrentAddress: "" });
+        break;
       default:
         this.setState({ typeAddressEnabled: false })
-
+        this.setState({ markCurrentLocationEnabled: false })
+        this.setState({ markOnMapEnabled: false })
     }
   }
   handleNameFocus = () => this.setState({ nameFocused: true })
@@ -98,11 +106,13 @@ class NewPoint extends Component {
   componentWillUnmount(){
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
+ 
   onRegionChange = (region) => {
     this.setState({ myLocation2: region })
-    GeoCoder.from(region).then((response) => {
+     GeoCoder.from(region).then((response) => {
       const address = response.results[0].formatted_address;
       this.setState({ myCurrentAddress2: address })
+      this.setState({ myCurrentAddress: address })
     }).catch(() => {
       this.setState({ myCurrentAddress2: "Erro ao pegar seu endereço atual" })
     });
@@ -112,34 +122,44 @@ class NewPoint extends Component {
     const searchFocused = this.state.searchFocused;
 
     return (
-      <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
-        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.MainContainer} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <View style={styles.logoContainer}>
-              <Icon name='globe-americas' size={WIDTH * 0.08} color="#FFF" />
+      <Fragment>
+      <Header
+          left={<TouchableOpacity activeOpacity={0.7} onPress={this.handleBackPress} ><Icon name="arrow-left" color="#fff" size={25} /></TouchableOpacity>}
+          center={
+            <Text style={{ fontFamily: "MyriadPro", color: "#FFF" }}>
+              NOVO PONTO
+            </Text>
+          }
+        />
+        <View style={{flex:1, backgroundColor:"#EEEEEE"}}>
+        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.MainContainer} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center", paddingBottom: 20 }}>
+        <View style={styles.logoContainer}>
+              <Icon name='globe-americas' size={WIDTH * 0.08} color="white" />
             </View>
-            <View style={[styles.inputContainer, this.state.nameFocused ? { borderBottomColor: '#FFF' } : (this.state.missName ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#AAA' })]}>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View style={[styles.inputContainer, this.state.nameFocused ? { borderBottomColor: '#7049f9' } : (this.state.missName ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#7049f9' })]}>
               <View style={[styles.inputIcon, this.state.nameFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
-                <Icon name='map-marker-alt' size={20} color={this.state.nameFocused ? '#FFF' : this.state.missName ? '#ff4349' : '#FFF'} />
+                <Icon name='map-marker-alt' size={20} color={this.state.nameFocused ? '#7049f9' : this.state.missName ? '#ff4349' : '#7049f9'} />
               </View>
               <TextInput
                 onFocus={this.handleNameFocus}
                 onBlur={this.handleNameBlur}
-                style={[styles.input, this.state.nameFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missName ? { color: '#ff4349' } : { color: '#FFF' }))]}
+                style={[styles.input, this.state.nameFocused ? ({ opacity: 1 }, { color: '#7049f9' }) : ({ opacity: 0.5 }, (this.state.missName ? { color: '#ff4349' } : { color: '#7049f9' }))]}
                 placeholder='Nome do ponto'
-                maxLength={30}
-                placeholderTextColor={this.state.nameFocused ? '#FFF' : this.state.missName ? '#ff4349' : '#FFF'}
+                maxLength={50}
+                value={this.state.name}
+                placeholderTextColor={this.state.nameFocused ? '#7049f9' : this.state.missName ? '#ff4349' : '#7049f9'}
                 onChangeText={this.setName}
               />
             </View>
-            <View style={[styles.inputContainer, { borderBottomColor: '#AAA' }]}>
+            <View style={[styles.inputContainer, { borderBottomColor: '#7049f9' }]}>
               <View style={[styles.inputIcon, { opacity: 0.5 }]}>
-                <Icon name='map-marked-alt' size={22} color={'#FFF'} />
+                <Icon name='map-marked-alt' size={22} color={'#7049f9'} />
               </View>
               <Picker
                 selectedValue={this.state.pickerValue}
                 style={[styles.input, {
-                  color: '#FFF', fontFamily: "MyriadPro", fontSize: 15, marginLeft: -20, transform: [
+                  color: '#7049f9', fontFamily: "MyriadPro", fontSize: 15, marginLeft: -20, transform: [
                     { scaleX: 0.8 },
                     { scaleY: 0.8 },
                   ]
@@ -152,15 +172,15 @@ class NewPoint extends Component {
               </Picker>
             </View>
             {this.state.markCurrentLocationEnabled &&
-              <View style={[styles.inputContainer, { borderBottomColor: '#FFF' }]}>
-                <Text style={[styles.input, { opacity: 1 }, { color: '#FFF' }]} numberOfLines={1} ellipsizeMode="tail" pointerEvents="none" >{this.state.myCurrentAddress} </Text>
+              <View style={[styles.inputContainer, { borderBottomColor: '#7049f9' }]}>
+                <Text style={[styles.input, { opacity: 1 }, { color: '#7049f9' }]} numberOfLines={1} ellipsizeMode="tail" pointerEvents="none" >{this.state.myCurrentAddress} </Text>
               </View>
             }
             {this.state.typeAddressEnabled &&
               <View style={styles.autocomplete}>
                 <GooglePlacesAutocomplete
                   placeholder="Digite o endereço"
-                  placeholderTextColor="#FFF"
+                  placeholderTextColor="#7049f9"
                   ref={c => this.googlePlacesAutocomplete = c}
                   onPress={this.handleLocationSelected}
                   query={{
@@ -179,7 +199,7 @@ class NewPoint extends Component {
                   enablePoweredByContainer={false}
                   renderRightButton={() =>
                     this.state.clearButtonEnabled && <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", padding: 5 }} activeOpacity={0.9} onPress={() => { this.clearInput() }}>
-                      <Icon name='times-circle' size={22} color={'#FFF'} />
+                      <Icon name='times-circle' size={22} color={'#7049f9'} />
                     </TouchableOpacity>}
                   styles={styles}
                 />
@@ -187,8 +207,8 @@ class NewPoint extends Component {
             }
             {this.state.markOnMapEnabled &&
               <Fragment>
-                <View style={[styles.inputContainer, { borderBottomColor: '#FFF' }]}>
-                  <Text style={[styles.input, { opacity: 1 }, { color: '#FFF' }]} numberOfLines={1} ellipsizeMode="tail" pointerEvents="none" >{this.state.myCurrentAddress2} </Text>
+                <View style={[styles.inputContainer, { borderBottomColor: '#7049f9' }]}>
+                  <Text style={[styles.input, { opacity: 1 }, { color: '#7049f9' }]} numberOfLines={1} ellipsizeMode="tail" pointerEvents="none" >{this.state.myCurrentAddress2} </Text>
                 </View>
                 <View style={styles.Map}>
                   <MapView
@@ -204,14 +224,16 @@ class NewPoint extends Component {
             }
             <View style={styles.bottomContainer}>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { }}>
+                <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { this.validation()}}>
                   <Text style={styles.btnTxt}>Marcar ponto</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </ScrollView>
-      </LinearGradient>
+        </View>
+        </Fragment>
+       
     );
   }
 }
