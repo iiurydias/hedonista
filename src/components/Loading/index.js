@@ -9,7 +9,7 @@ export default class Loading extends Component {
               <Modal visible={this.props.visible} onRequestClose = {() => {}} transparent>
                 <View style={styles.contain}>
                   <View style={styles.boxIndicador}>  
-                     <ActivityIndicator size="small" color="#ED6650" />
+                     <ActivityIndicator size="small" color="#7049f9" />
                   </View>
                 </View>
               </Modal>

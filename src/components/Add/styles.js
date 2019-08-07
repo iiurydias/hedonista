@@ -2,12 +2,9 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   Button: {
-    position: 'absolute',
     justifyContent: "center",
     alignItems: "center",
-    bottom: 0,
     margin: 15,
-    paddingRight: 15,
     flex: 1,
     shadowColor: "#000",
     shadowOffset: {

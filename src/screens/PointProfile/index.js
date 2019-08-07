@@ -78,7 +78,6 @@ class PointProfile extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
   render() {
-    
     return (
       <Fragment>
         <Header
@@ -141,20 +140,9 @@ class PointProfile extends Component {
           </View>
           :
           <View style={[styles.Info, { flexDirection: 'row'}]}>
-            <View style={[styles.MainInfo, {width: '60%'}]}>
-              <Text style={styles.Title}>Lanchonete do seu Zé</Text>
-              <Text style={styles.Address}>Rua Antônio Fagundes, 533</Text>
-            </View>
-            <View style={[styles.Metrics, {width: '40%', padding: 20, paddingLeft: 0}]}>
-              <View style={[styles.buttonContainer, {width: '100%'}]}>
-                <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { }}>
-                  <View style={styles.SmallCircle}>
-                    <IconElements name="heart" iconStyle={{ color: "white" }} type="font-awesome" size={12} />
-                  </View>
-                  <Text numberOfLines={1} style={styles.btnTxt}>Favoritar</Text>
-                </TouchableOpacity>
-                <Text style={styles.Label}>Criado por: Antônio Fagundes</Text>
-              </View>
+            <View style={[styles.MainInfo, {width: '100%'}]}>
+              <Text style={styles.Title}>{this.state.title}</Text>
+              <Text style={styles.Address}>{this.state.address}</Text>
             </View>
           </View>
           }

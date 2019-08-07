@@ -4,23 +4,23 @@ import Home from "./screens/Home";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import PointProfile from "./screens/PointProfile";
-import SignInScreen from "./screens/SignInScreen";
-import HomeScreen from "./screens/HomeScreen";
+import SubcategoryList from "./screens/SubcategoryList";
+import NewSubcategory from "./screens/NewSubcategory";
 
 import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 
 import NewPoint from "./screens/NewPoint";
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
-// Implementation of HomeScreen, OtherScreen, SignInScreen, AuthLoadingScreen
-// goes here.
 
 const AppStack = createStackNavigator(
   {
     Home: Home,
     Points: Points,
     PointProfile, PointProfile,
-    NewPoint: NewPoint
+    NewPoint: NewPoint,
+    SubcategoryList: SubcategoryList,
+    NewSubcategory: NewSubcategory
   },
   {
     headerMode: 'none',

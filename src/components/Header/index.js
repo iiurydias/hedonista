@@ -8,15 +8,15 @@ class Header extends Component {
       <View>
         <View style={styles.container}>
           <StatusBar backgroundColor="#7049f9" />
-          <View>
+          <View style={styles.left}>
             {this.props.left}
           </View>
 
-          <View>
+          <View style={styles.center}>
             {this.props.center}
           </View>
 
-          <View>
+          <View style={styles.right}>
             {this.props.right}
           </View>
         </View>

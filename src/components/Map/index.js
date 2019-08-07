@@ -246,7 +246,7 @@ class Map extends Component {
             />
           }
           {!locationChanged && 
-            <View style={{ alignItems: 'flex-end' }}>
+            <View style={{ alignItems: 'flex-end', position: 'absolute', bottom: 0, right: 0, justifyContent: 'flex-end' }}>
               <Add onPress={() => { this.props.navigation.navigate('NewPoint') }} />
             </View>
           }

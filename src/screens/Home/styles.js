@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     flexGrow: 1
   },
   Container:{
-    padding: 20
+    margin: 20
   },
   Greetings:{
     marginLeft: 10,
@@ -37,10 +37,24 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     backgroundColor: '#6746EC',
     height: '100%',
-    borderTopStartRadius: 80,
-    borderTopEndRadius: 80,
+    borderTopStartRadius: 60,
+    borderTopEndRadius: 60,
     flex: 1
-  }
+  },
+  btnDelete:{
+    width: "100%",
+    paddingLeft: 5,
+    height: 80,
+    justifyContent: "center",
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  txtDeletar:{
+    fontFamily: "MyriadPro",
+    color: "#fff",
+    marginLeft: 10,
+    
+  },
 });
 
 export default styles;

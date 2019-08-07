@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
     paddingBottom: 20,
     paddingTop: 20,
-    flexGrow: 1, 
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     height: '100%',
@@ -49,67 +49,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
+    padding: 20
   },
   buttonContainer: {
     width: WIDTH - 55,
     marginTop: 25
   },
-  autocomplete:{
-    width: WIDTH - 70,
-    margin: 15
-  },
-  Map:{
-    width: WIDTH - 70,
-    height: 250,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
-
-  },
-  container: {
-    borderWidth: 0
-  },
-  textInputContainer: {
-  
-    backgroundColor: 'transparent',
-    borderBottomWidth: 1,
-    borderColor: "#7049f9",
-    paddingRight: 10
-  },
-  textInput: {
-    backgroundColor: 'transparent',
-    fontFamily: "MyriadPro",
-    color: '#7049f9',
-    fontSize: 13,
-  },
-  listView: {
-    borderBottomWidth: 1,
-    borderColor: "#DDD",
-    backgroundColor: "#7049f9",
-    opacity: 0.5,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { x: 0, y: 0 },
-    shadowRadius: 15,
-    marginTop: 7,
-    paddingRight: 10,
-    borderRadius: 10
-  },
-  description: {
-    fontFamily: "MyriadPro",
-    color: "#FFF"
-  },
-  row: {
-    padding: 13,
-    height: 51
-  },
-  Greetings:{
+  Greetings: {
     marginLeft: 10,
     fontFamily: "MyriadPro",
     fontSize: 25,

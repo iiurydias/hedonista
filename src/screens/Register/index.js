@@ -101,6 +101,29 @@ class Register extends Component {
   handlePassBlur = () => this.setState({ passFocused: false })
   handleConfirmPassFocus = () => this.setState({ confirmPassFocused: true })
   handleConfirmPassBlur = () => this.setState({ confirmPassFocused: false })
+  async getData(){
+    try {
+      const response = await fetch('http://hedonista-com-br.hostoo.net/api/getHomeData?token='+this.props.navigation.getParam('token'),{
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: 'test',
+            password: 'test123',
+        })
+      });
+      const result = await response.json();
+      if(result.status){
+        this.setState({dataRand: result.dados});
+      }else{
+        Alert.alert("Erro", result.message);
+      }
+    } catch (error) {
+       Alert.alert("Erro", "Verifique sua conexão.");
+    }
+  } 
   render() {
     const { width: WIDTH } = Dimensions.get('window')
     return (

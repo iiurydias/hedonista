@@ -3,6 +3,7 @@ import styles from "./styles";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, AsyncStorage } from "react-native";
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from "react-native-vector-icons/FontAwesome5";
+import Loading from '../../components/Loading';
 
 class Login extends Component {
   state = {
@@ -10,14 +11,11 @@ class Login extends Component {
     valideEmail: false,
     emailFocused: false,
     passFocused: false,
-    login: {
-      name: 'Iury Dias',
-      user: 'admin',
-      pass: 'admin'
-    },
+    userData: null,
     user: '',
     pass: '',
-    wrongLogin: false
+    wrongLogin: false,
+    visibleModal: false
   }
   showPass = () => {
     if (this.state.showPass == false) {
@@ -31,13 +29,9 @@ class Login extends Component {
   handleEmailFocus = () => this.setState({ emailFocused: true })
   handleEmailBlur = () => this.setState({ emailFocused: false })
   _signInAsync = async () => {
-    if (this.state.user == this.state.login.user && this.state.pass == this.state.login.pass) {
-      await AsyncStorage.setItem('userToken', 'abc');
-      await AsyncStorage.setItem('userName', this.state.login.name);
-      this.props.navigation.navigate('App');
-      return
-    }
-    this.setState({ wrongLogin: true })
+    this.setState({ visibleModal: true });
+    await this.getData()
+    this.setState({ visibleModal: false });
   };
   emailInputChange = (text) => {
     this.setState({ user: text })
@@ -45,9 +39,25 @@ class Login extends Component {
   passInputChange = (text) => {
     this.setState({ pass: text })
   }
+  async getData() {
+    try {
+      const response = await fetch('http://hedonista-com-br.hostoo.net/api/login?email=' + this.state.user + '&password=' + this.state.pass);
+      const result = await response.json();
+      if (result.success) {
+        await AsyncStorage.setItem('userToken', result.data.api_token);
+        await AsyncStorage.setItem('userName', result.data.name.charAt(0).toUpperCase() + result.data.name.slice(1) + " " + result.data.lastName.charAt(0).toUpperCase() + result.data.lastName.slice(1));
+        this.props.navigation.navigate('App');
+      } else {
+        this.setState({ wrongLogin: true })
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Verifique sua conexão.");
+    }
+  }
   render() {
     return (
       <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
+        <Loading visible={this.state.visibleModal} />
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
           <View style={styles.logoContainer}>
             <Text style={styles.logo}>LOGO HEDONISTA AQUI</Text>
@@ -86,7 +96,7 @@ class Login extends Component {
             </View>
           </View>
           {this.state.wrongLogin &&
-          <Text style={styles.invalid}>Login inválido</Text>
+            <Text style={styles.invalid}>Login inválido</Text>
           }
           <View style={styles.bottomContainer}>
             <View style={styles.buttonContainer}>

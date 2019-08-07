@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   Container: {
     backgroundColor: '#FFF',
+    height: 80,
     marginBottom: 10,
     marginTop: 10,
     borderRadius: 10,
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     color: '#AAAAAA'
   },
   InfoContainer:{
-    width: '80%',
+    width: '80%'
   },
   IconContainer:{
     width: '20%',

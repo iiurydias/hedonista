@@ -12,7 +12,7 @@ class Add extends Component {
           onPress={this.props.onPress}
           style={styles.Content}
         >
-          <Icon name="plus" size={35} color="#FFF" />
+          <Icon name="plus" size={30} color="#FFF" />
         </TouchableOpacity>
       </View>
     );

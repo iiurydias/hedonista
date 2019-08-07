@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   },
   Map: {
     height: 130,
+    flex: 1
   },
   Info: {
     //height: '20%',

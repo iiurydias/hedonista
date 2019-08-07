@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     boxIndicador:{
         backgroundColor: "#fff",
         borderRadius: 100,
-        padding: 30
+        padding: 20
     }
 });
 
