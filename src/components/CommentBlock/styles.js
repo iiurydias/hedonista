@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     //paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
-    alignItems: "center",
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    width: '100%'
   },
   Author: {
     fontSize: 15,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     color: "#6646EB"
   },
   Comment:{
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: "MyriadPro",
     color: '#AAAAAA',
     marginTop: 3,

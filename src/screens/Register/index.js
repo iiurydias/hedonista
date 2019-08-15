@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styles from "./styles";
-import { View, Text, TextInput, TouchableOpacity, Dimensions, Picker, ScrollView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, StatusBar } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -101,33 +101,34 @@ class Register extends Component {
   handlePassBlur = () => this.setState({ passFocused: false })
   handleConfirmPassFocus = () => this.setState({ confirmPassFocused: true })
   handleConfirmPassBlur = () => this.setState({ confirmPassFocused: false })
-  async getData(){
+  async getData() {
     try {
-      const response = await fetch('http://hedonista-com-br.hostoo.net/api/getHomeData?token='+this.props.navigation.getParam('token'),{
+      const response = await fetch('http://hedonista-com-br.hostoo.net/api/getHomeData?token=' + this.props.navigation.getParam('token'), {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            username: 'test',
-            password: 'test123',
+          username: 'test',
+          password: 'test123',
         })
       });
       const result = await response.json();
-      if(result.status){
-        this.setState({dataRand: result.dados});
-      }else{
+      if (result.status) {
+        this.setState({ dataRand: result.dados });
+      } else {
         Alert.alert("Erro", result.message);
       }
     } catch (error) {
-       Alert.alert("Erro", "Verifique sua conexão.");
+      Alert.alert("Erro", "Verifique sua conexão.");
     }
-  } 
+  }
   render() {
     const { width: WIDTH } = Dimensions.get('window')
     return (
       <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
+        <StatusBar backgroundColor="#7049f9" />
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <View style={styles.logoContainer}>

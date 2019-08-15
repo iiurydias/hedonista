@@ -2,9 +2,8 @@ import React, { Component, Fragment } from "react";
 import styles from "./styles";
 import { View, Text, TextInput, TouchableOpacity, Dimensions, Alert, Picker, ScrollView, BackHandler } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import LinearGradient from 'react-native-linear-gradient'
 import Header from "../../components/Header";
-
+import Loading from '../../components/Loading';
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import GeoCoder from 'react-native-geocoding'
 import MapView from "react-native-maps";
@@ -22,24 +21,52 @@ class NewPoint extends Component {
     markCurrentLocationEnabled: true,
     typeAddressEnabled: false,
     markOnMapEnabled: false,
-    myCurrentAddress: 'Meu endereço atual ',
-    myCurrentAddress2: 'Meu endereço atual ',
-    myLocation: {
-      latitude: -12.962413,
-      longitude: -38.432113
-    },
-    myLocation2: {
-      latitude: -12.962413,
-      longitude: -38.432113,
-      latitudeDelta: 0.003,
-      longitudeDelta: 0.003
-    }
+    myCurrentAddress: 'Meu endereço atual',
+    myLocation: null,
+    visibleModal: false,
+
   }
   validateName = () => {
     if (this.state.name === '' || (this.state.name.length) < 2) {
       this.setState({ missName: true })
+      return false
     } else {
       this.setState({ missName: false })
+      return true
+    }
+  }
+  async createPoint() {
+    let data = new FormData();
+    data.append("name", this.state.name);
+    data.append("subcategory_id", parseInt(this.props.navigation.getParam('subcategoryId')));
+    data.append("user_id", parseInt(this.props.navigation.getParam('userId')));
+    data.append("address", this.state.myCurrentAddress);
+    data.append("latitude", this.state.myLocation.latitude);
+    data.append("longitude", this.state.myLocation.longitude);
+    try {
+      const response = await fetch(api + '/point', {
+        method: 'POST',
+        headers: {
+          token: this.props.navigation.getParam('token')
+        },
+        body: data
+      });
+      const result = await response.json();
+      if (result.success) {
+        this.setState({ data: result.data });
+        this.props.navigation.goBack()
+      } else {
+        Alert.alert("Erro", result.message);
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Verifique sua conexão.");
+    }
+  }
+  _postPoint = async () => {
+    if (this.validation()) {
+      this.setState({ visibleModal: true });
+      await this.createPoint();
+      this.setState({ visibleModal: false });
     }
   }
   setName = (text) => {
@@ -48,13 +75,21 @@ class NewPoint extends Component {
   }
   validation = () => {
     this.setState({ nameFocused: false })
-    this.validateName();
-    if (this.state.myCurrentAddress == "") {
-      Alert.alert("Erro", "Selecione um endereço válido")
+    if (this.validateName()) {
+      if (this.state.myCurrentAddress == "") {
+        Alert.alert("Erro", "Selecione um endereço válido")
+        return false
+      }
+      return true
     }
+    return false
   }
   handleLocationSelected = (data, { geometry }) => {
-    this.setState({ myCurrentAddress: data.description, clearButtonEnabled: true })
+    this.setState({
+      myCurrentAddress: data.description,
+      myLocation: { latitude: geometry.location.lat, longitude: geometry.location.lng, latitudeDelta: 0.003, longitudeDelta: 0.003 },
+      clearButtonEnabled: true
+    })
   }
   clearInput = () => {
     this.setState({ clearButtonEnabled: false })
@@ -92,9 +127,10 @@ class NewPoint extends Component {
   handleNameBlur = () => this.setState({ nameFocused: false })
   async componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-    GeoCoder.from(this.state.myLocation).then((response) => {
+    const origin = this.props.navigation.getParam('origin');
+    GeoCoder.from({ latitude: origin.latitude, longitude: origin.longitude }).then((response) => {
       const address = response.results[0].formatted_address;
-      this.setState({ myCurrentAddress: address })
+      this.setState({ myCurrentAddress: address, myLocation: origin })
     }).catch(() => {
       this.setState({ myCurrentAddress: "Erro ao pegar seu endereço atual" })
     });
@@ -108,31 +144,31 @@ class NewPoint extends Component {
   }
 
   onRegionChange = (region) => {
-    this.setState({ myLocation2: region })
+    this.setState({ myLocation: region })
     GeoCoder.from(region).then((response) => {
       const address = response.results[0].formatted_address;
-      this.setState({ myCurrentAddress2: address })
+      this.setState({ myCurrentAddress: address })
       this.setState({ myCurrentAddress: address })
     }).catch(() => {
-      this.setState({ myCurrentAddress2: "Erro ao pegar seu endereço atual" })
+      this.setState({ myCurrentAddress: "Erro ao pegar seu endereço atual" })
     });
   }
   render() {
     const { width: WIDTH } = Dimensions.get('window')
     const searchFocused = this.state.searchFocused;
-
     return (
       <Fragment>
         <Header
           left={<TouchableOpacity activeOpacity={0.7} onPress={this.handleBackPress} ><Icon name="arrow-left" color="#fff" size={25} /></TouchableOpacity>}
         />
-        <ScrollView style={{ backgroundColor: "#7049f9"}} contentContainerStyle={{flex: 1}} keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false}>
-        <View style={{ padding: 20 }}>
-          <Text style={[styles.Greetings, { fontWeight: 'bold' }]} >Criar um </Text>
-          <Text style={styles.Greetings} >novo ponto:</Text>
-        </View>
+        <Loading visible={this.state.visibleModal} />
+        <ScrollView style={{ backgroundColor: "#7049f9", flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false}>
+          <View style={{ padding: 20 }}>
+            <Text style={[styles.Greetings, { fontWeight: 'bold' }]} >Criar um </Text>
+            <Text style={styles.Greetings} >novo ponto:</Text>
+          </View>
           <View style={styles.MainContainer}>
-            <View style={{ justifyContent: "center", alignItems: "center"}}>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
               <View style={[styles.inputContainer, this.state.nameFocused ? { borderBottomColor: '#7049f9' } : (this.state.missName ? { borderBottomColor: '#ff4349' } : { borderBottomColor: '#7049f9' })]}>
                 <View style={[styles.inputIcon, this.state.nameFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
                   <Icon name='map-marker-alt' size={20} color={this.state.nameFocused ? '#7049f9' : this.state.missName ? '#ff4349' : '#7049f9'} />
@@ -204,12 +240,12 @@ class NewPoint extends Component {
               {this.state.markOnMapEnabled &&
                 <Fragment>
                   <View style={[styles.inputContainer, { borderBottomColor: '#7049f9' }]}>
-                    <Text style={[styles.input, { opacity: 1 }, { color: '#7049f9' }]} numberOfLines={1} ellipsizeMode="tail" pointerEvents="none" >{this.state.myCurrentAddress2} </Text>
+                    <Text style={[styles.input, { opacity: 1 }, { color: '#7049f9' }]} numberOfLines={1} ellipsizeMode="tail" pointerEvents="none" >{this.state.myCurrentAddress} </Text>
                   </View>
                   <View style={styles.Map}>
                     <MapView
                       style={{ flex: 1 }}
-                      region={this.state.myLocation2}
+                      region={this.state.myLocation}
                       onRegionChangeComplete={this.onRegionChange}
                     />
                     <View style={{ position: 'absolute', left: [(WIDTH - 70) / 2] - 25, top: (250 / 2) - 70 }}>
@@ -220,14 +256,14 @@ class NewPoint extends Component {
               }
               <View style={styles.bottomContainer}>
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { this.validation() }}>
+                  <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { this._postPoint() }}>
                     <Text style={styles.btnTxt}>Marcar ponto</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
           </View>
-      </ScrollView>
+        </ScrollView>
       </Fragment>
     );
   }

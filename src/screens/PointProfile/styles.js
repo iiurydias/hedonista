@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#7049f9',
     borderTopStartRadius: 20,
     borderTopEndRadius: 20,
-
+    justifyContent: "center",
+    alignItems: "center",
   },
   Comments: {
     flexGrow: 1,

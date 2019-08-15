@@ -8,6 +8,7 @@ import styles from "./styles";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Swipeable from 'react-native-swipeable';
 import Loading from '../../components/Loading';
+import api from '../../services/api';
 
 const NO_LOCATION_PROVIDER_AVAILABLE = 2;
 
@@ -21,11 +22,16 @@ class Home extends Component {
     userName: '',
     token: '',
     editEnabled: false,
-    visibleModal: false
+    visibleModal: false,
+    userId: ''
   }
   async getData() {
     try {
-      const response = await fetch('http://hedonista-com-br.hostoo.net/api/getHomeData?token=' + this.state.token);
+      const response = await fetch(api+'/homedata',{
+        headers:{
+          token:  this.state.token
+        }
+      });
       const result = await response.json();
       if (result.success) {
         this.setState({ data: result.data });
@@ -39,9 +45,10 @@ class Home extends Component {
   _getUserAndToken = async () => {
     const userName = await AsyncStorage.getItem('userName');
     const token = await AsyncStorage.getItem('userToken');
-
-    this.setState({ userName: userName, token: token })
+    const userId = await AsyncStorage.getItem('userId');
+    this.setState({ userId: userId, userName: userName, token: token })
   }
+
   checkLocation() {
     navigator.geolocation.getCurrentPosition(
       () => {
@@ -74,7 +81,7 @@ class Home extends Component {
       this.setState({ editEnabled: true })
     }
   }
-  async removerFav($id) {
+  async removeFav($id) {
     data = this.state.data
     for (var i = 0; i < data.favorites.length; i++) {
       if (data.favorites[i].id === $id) {
@@ -82,14 +89,18 @@ class Home extends Component {
       }
       this.setState({ data: data })
     }
-    this.setState({ visibleModal: true });
-    await this.unfavorite($id);
-    this.setState({ visibleModal: false });
+  }
+  async unfavoriteAndRemove($id) {
+    await unfavorite($id)
+    await removeFav($id)
   }
   async unfavorite($id) {
     try {
-      const response = await fetch('http://hedonista-com-br.hostoo.net/api/unfavorite?token=' + this.state.token + '&favorite_id=' + $id, {
-        method: 'delete'
+      const response = await fetch(api+'/unfavorite?favorite_id=' + $id, {
+        method: 'delete',
+        headers:{
+          token:  this.state.token
+        }
       });
       const result = await response.json();
       if (result.success) {
@@ -102,6 +113,12 @@ class Home extends Component {
     }
   }
   render() {
+   const { data,
+    userName,
+    token,
+    editEnabled,
+    visibleModal,
+    userId } = this.state;
     return (
       <Fragment>
         <Loading visible={this.state.visibleModal} />
@@ -130,7 +147,7 @@ class Home extends Component {
                 {this.state.data.categories.length > 0 ?
                   (this.state.data.categories.map(
                     p =>
-                      <CategoryBox key={p.id} onPress={() => { this.props.navigation.navigate('SubcategoryList', { categoryId: p.id, token: this.state.token }) }} icon={p.icon} title={p.name} pointNumber={p.pointsNumber} />
+                      <CategoryBox key={p.id} onPress={() => { this.props.navigation.navigate('SubcategoryList', { categoryId: p.id, token: this.state.token, icon: p.icon, userId: this.state.userId }) }} icon={p.icon} title={p.name} pointNumber={p.pointsNumber} />
                   ))
                   :
                   <CategoryBox />
@@ -160,7 +177,7 @@ class Home extends Component {
                     p =>
                       <Swipeable key={p.id} rightActionActivationDistance={150} rightContent={<View style={styles.btnDelete}>
                         <Icon name='trash-alt' size={20} color="#d64541" />
-                      </View>} onRightActionRelease={() => this.removerFav(p.id)}>
+                      </View>} onRightActionRelease={() => this.unfavoriteAndRemove(p.id)}>
                         <FavoriteBlock onPress={() => {
                           this.props.navigation.navigate('PointProfile',
                             {
@@ -168,7 +185,11 @@ class Home extends Component {
                               address: p.point.address,
                               latitude: p.point.latitude,
                               longitude: p.point.longitude,
-                              navigationWithData: false
+                              navigationWithData: false,
+                              pointId: p.id,
+                              token: token,
+                              userId: userId,
+                              author: p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)
                             })
                         }} icon={p.icon} title={p.point.name} address={p.point.address} />
                       </Swipeable>
@@ -182,7 +203,12 @@ class Home extends Component {
                             address: p.point.address,
                             latitude: p.point.latitude,
                             longitude: p.point.longitude,
-                            navigationWithData: false
+                            navigationWithData: false,
+                            pointId: p.id,
+                            token: token,
+                            userId: userId,
+                            author: p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)
+                          
                           })
                       }} icon={p.icon} title={p.point.name} address={p.point.address} />
                   ))

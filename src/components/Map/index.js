@@ -31,7 +31,8 @@ class Map extends Component {
     locationChanged: false,
     title: null,
     address: null,
-    searchFocused: false
+    searchFocused: false,
+    directionsBuilt: false
   };
   async componentDidMount() {
     this.watchId = await navigator.geolocation.watchPosition(
@@ -44,15 +45,7 @@ class Map extends Component {
             longitude,
             latitudeDelta: 0.0143,
             longitudeDelta: 0.0134
-          },
-          //region: {
-          //latitude: position.coords.latitude,
-          //longitude: position.coords.longitude,
-          //latitudeDelta: 0.0143,
-          //longitudeDelta: 0.0134
-          //},
-          //latitude: latitude,
-          // longitude: longitude
+          }
         });
       },
       () => {
@@ -65,12 +58,6 @@ class Map extends Component {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         this.setState({
-          //origin: {
-          //latitude,
-          //longitude,
-          //latitudeDelta: 0.0143,
-          //longitudeDelta: 0.0134
-          // },
           region: {
             latitude,
             longitude,
@@ -99,7 +86,9 @@ class Map extends Component {
     this.setState({ tracksViewChanges: false });
   };
   onDirectionButtonPress = () => {
+    if (!this.state.directionsBuilt) {
     this.props.actions.destinationActions.setDestination({ latitude: this.state.pointLocation.latitude, longitude: this.state.pointLocation.longitude });
+    }
   };
 
   handleLocationSelected = (data, { geometry }) => {
@@ -131,7 +120,8 @@ class Map extends Component {
       locationChanged,
       title,
       address,
-      searchFocused
+      searchFocused,
+      directionsBuilt
     } = this.state;
     return (
       <Fragment>
@@ -151,6 +141,7 @@ class Map extends Component {
               this.props.actions.durationActions.setDuration(null);
               this.props.actions.distanceActions.setDistance(null);
               this.props.actions.clickedActions.setClicked(false);
+              this.setState({ directionsBuilt: false })
             }}
           >
             {this.props.destination && (
@@ -159,27 +150,31 @@ class Map extends Component {
                   origin={origin}
                   destination={this.props.destination}
                   onReady={result => {
-                    this.props.actions.durationActions.setDuration(Math.floor(result.duration));
-                    this.props.actions.distanceActions.setDistance(result.distance.toFixed(2));
-                    try {
-                      this.mapView.fitToCoordinates(result.coordinates, {
-                        edgePadding: {
-                          right: getPixelSize(50),
-                          left: getPixelSize(50),
-                          top: getPixelSize(250),
-                          bottom: getPixelSize(50)
-                        }
-                      });
-                    } catch (error) {
-                      Alert.alert("Erro", "Erro ao tentar traçar a rota");
+                    //this.props.actions.durationActions.setDuration(Math.floor(result.duration));
+                    //this.props.actions.distanceActions.setDistance(result.distance.toFixed(2));
+                    
+                      try {
+                        this.setState({ directionsBuilt: true })
+                        this.mapView.fitToCoordinates(result.coordinates, {
+                          edgePadding: {
+                            right: getPixelSize(50),
+                            left: getPixelSize(50),
+                            top: getPixelSize(250),
+                            bottom: getPixelSize(50)
+                          }
+                        });
+                      } catch (error) {
+                        Alert.alert("Erro", "Erro ao tentar traçar a rota");
+                        this.setState({ directionsBuilt: false })
+                      }
                     }
-                  }}
+                  }
                 />
                 <Marker
                   tracksViewChanges={tracksViewChanges}
                   coordinate={{
-                    latitude: parseFloat(origin.latitude),
-                    longitude: parseFloat(origin.longitude)
+                    latitude: origin.latitude,
+                    longitude: origin.longitude
                   }}
                 >
                   <Icon name='child' size={30} color="#7049f9" />
@@ -196,27 +191,31 @@ class Map extends Component {
                 ) < 20 && (
                   <Marker
                     tracksViewChanges={tracksViewChanges}
-                    key={p.key}
+                    key={p.id}
                     coordinate={{
-                      latitude: parseFloat(p.latitude),
-                      longitude: parseFloat(p.longitude)
+                      latitude: p.latitude,
+                      longitude: p.longitude
                     }}
                     onPress={() => {
                       this.props.actions.destinationActions.setDestination(null);
+                      this.props.actions.distanceActions.setDistance(null);
+                      this.props.actions.durationActions.setDuration(null);
                       this.setState({
                         region: {
-                          latitude: parseFloat(p.latitude),
-                          longitude: parseFloat(p.longitude),
+                          latitude: p.latitude,
+                          longitude: p.longitude,
                           latitudeDelta: 0.0143,
                           longitudeDelta: 0.0134
                         },
                         pointLocation: {
-                          latitude: parseFloat(p.latitude),
-                          longitude: parseFloat(p.longitude),
-                          key: p.key
+                          latitude: p.latitude,
+                          longitude: p.longitude,
+                          key: p.id,
+                          author: p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)
                         },
                         title: p.name,
-                        address: p.address
+                        address: p.address,
+                        directionsBuilt: false
                       });
                       this.props.actions.clickedActions.setClicked(true);
                     }}
@@ -245,9 +244,16 @@ class Map extends Component {
             }
             />
           }
-          {!locationChanged && 
+          {!locationChanged &&
             <View style={{ alignItems: 'flex-end', position: 'absolute', bottom: 0, right: 0, justifyContent: 'flex-end' }}>
-              <Add onPress={() => { this.props.navigation.navigate('NewPoint') }} />
+              <Add onPress={() => {
+                this.props.navigation.navigate('NewPoint', {
+                  userId: this.props.userId,
+                  subcategoryId: this.props.subcategoryId,
+                  token: this.props.token,
+                  origin: this.state.origin
+                })
+              }} />
             </View>
           }
 
@@ -257,29 +263,37 @@ class Map extends Component {
                 destination={pointLocation}
                 origin={origin}
                 onReady={result => {
-                  this.props.actions.durationActions.setDuration(Math.floor(result.duration));
                   this.props.actions.distanceActions.setDistance(result.distance.toFixed(2));
+                  this.props.actions.durationActions.setDuration(Math.floor(result.duration).toString());
                 }}
                 apikey="AIzaSyA-H7zGSuNzyCZDW5pPeegOgykilPgmMug"
               />
               {this.props.duration && (
-                <Details
-                  title={title}
-                  address={address}
-                  distance={this.props.distance}
-                  duration={this.props.duration}
-                  onDirectionButtonPress={this.onDirectionButtonPress}
-                  onPress={() => { this.props.navigation.navigate('PointProfile',
-                    {
-                      latitude: this.state.pointLocation.latitude,
-                      longitude: this.state.pointLocation.longitude,
-                      duration: this.props.duration,
-                      distance: this.props.distance,
-                      title: title,
-                      address: address,
-                      navigationWithData: true
-                    }) }}
-                />
+                <Fragment>
+                  <Details
+                    title={title}
+                    address={address}
+                    distance={this.props.distance}
+                    duration={this.props.duration}
+                    onDirectionButtonPress={this.onDirectionButtonPress}
+                    onPress={() => {
+                      this.props.navigation.navigate('PointProfile',
+                        {
+                          latitude: this.state.pointLocation.latitude,
+                          longitude: this.state.pointLocation.longitude,
+                          duration: this.props.duration,
+                          distance: this.props.distance,
+                          title: title,
+                          address: address,
+                          navigationWithData: true,
+                          pointId: this.state.pointLocation.key,
+                          token: this.props.token,
+                          userId: this.props.userId,
+                          author: this.state.pointLocation.author
+                        })
+                    }}
+                  />
+                </Fragment>
               )}
             </Fragment>
           ) : (

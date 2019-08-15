@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import styles from "./styles";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, AsyncStorage } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, AsyncStorage, Alert, StatusBar } from "react-native";
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Loading from '../../components/Loading';
+import api from '../../services/api';
 
 class Login extends Component {
   state = {
@@ -15,7 +16,8 @@ class Login extends Component {
     user: '',
     pass: '',
     wrongLogin: false,
-    visibleModal: false
+    visibleModal: false,
+    warning: ''
   }
   showPass = () => {
     if (this.state.showPass == false) {
@@ -29,10 +31,19 @@ class Login extends Component {
   handleEmailFocus = () => this.setState({ emailFocused: true })
   handleEmailBlur = () => this.setState({ emailFocused: false })
   _signInAsync = async () => {
-    this.setState({ visibleModal: true });
-    await this.getData()
-    this.setState({ visibleModal: false });
-  };
+    if (this.validate()) {
+      this.setState({ visibleModal: true });
+      await this.getData()
+      this.setState({ visibleModal: false });
+    }
+  }
+  validate = () => {
+    if (this.state.user == "" || this.state.pass == "") {
+      this.setState({ warning: 'Por favor, preencha os campos', wrongLogin: true })
+      return false
+    }
+    return true
+  }
   emailInputChange = (text) => {
     this.setState({ user: text })
   }
@@ -41,22 +52,24 @@ class Login extends Component {
   }
   async getData() {
     try {
-      const response = await fetch('http://hedonista-com-br.hostoo.net/api/login?email=' + this.state.user + '&password=' + this.state.pass);
+      const response = await fetch(api + "/login?email=" + this.state.user + "&password=" + this.state.pass)
       const result = await response.json();
       if (result.success) {
         await AsyncStorage.setItem('userToken', result.data.api_token);
         await AsyncStorage.setItem('userName', result.data.name.charAt(0).toUpperCase() + result.data.name.slice(1) + " " + result.data.lastName.charAt(0).toUpperCase() + result.data.lastName.slice(1));
+        await AsyncStorage.setItem('userId', result.data.id.toString());
         this.props.navigation.navigate('App');
       } else {
-        this.setState({ wrongLogin: true })
+        this.setState({ warning: 'Login inválido', wrongLogin: true })
       }
-    } catch (error) {
+    } catch {
       Alert.alert("Erro", "Verifique sua conexão.");
     }
   }
   render() {
     return (
       <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
+        <StatusBar backgroundColor="#7049f9" />
         <Loading visible={this.state.visibleModal} />
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
           <View style={styles.logoContainer}>
@@ -96,7 +109,7 @@ class Login extends Component {
             </View>
           </View>
           {this.state.wrongLogin &&
-            <Text style={styles.invalid}>Login inválido</Text>
+            <Text style={styles.invalid}>{this.state.warning}</Text>
           }
           <View style={styles.bottomContainer}>
             <View style={styles.buttonContainer}>

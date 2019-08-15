@@ -5,7 +5,6 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import PointProfile from "./screens/PointProfile";
 import SubcategoryList from "./screens/SubcategoryList";
-import NewSubcategory from "./screens/NewSubcategory";
 
 import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 
@@ -19,8 +18,7 @@ const AppStack = createStackNavigator(
     Points: Points,
     PointProfile, PointProfile,
     NewPoint: NewPoint,
-    SubcategoryList: SubcategoryList,
-    NewSubcategory: NewSubcategory
+    SubcategoryList: SubcategoryList
   },
   {
     headerMode: 'none',

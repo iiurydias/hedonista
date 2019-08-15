@@ -16,29 +16,25 @@ export default class CommentBlock extends Component {
     let gender = this.props.gender;
     this.setState({ author: author, comment: comment, date: date, gender: gender });
   }
-  format(date) {
-    var data = date;
+  format($date) {
+    var data = $date.replace(/-/g,"/");
     data = new Date(data);
-    var day = data.getDay();
+    var day = data.getDate();
     var month = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][data.getMonth()];
     var year = data.getFullYear();
     return day + ' de ' + month + ' de ' + year
   }
   render() {
     return (
-      <View>
         <View style={styles.Container}>
-          <View >
-            <View >
-              <Text style={styles.Author} numberOfLines={1}>{this.state.author}</Text>
-              <Text style={styles.Comment} numberOfLines={2}>{this.state.comment}</Text>
-            </View>
-            <View style={{ alignItems: "flex-end" }}>
-              <Text style={styles.Date}>{this.state.date}</Text>
-            </View>
+          <View style={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+            <Text style={styles.Author} numberOfLines={1}>{this.state.author}</Text>
+            <Text style={styles.Comment} numberOfLines={2}>{this.state.comment}</Text>
+          </View>
+          <View style={{ justifyContent: "flex-end", alignItems: "flex-end" }}>
+            <Text style={styles.Date}>{this.state.date}</Text>
           </View>
         </View>
-      </View>
     );
   }
 }

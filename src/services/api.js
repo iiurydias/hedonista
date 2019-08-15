@@ -1,0 +1,1 @@
+export default api = "http://hedonista-com-br.hostoo.net/api"

@@ -2,31 +2,21 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   Container:{
-    margin: 8
+    margin: 8,
+    marginRight: 0
   },
   FirstLevel:{
     backgroundColor: '#c2c2c2',
+    flexDirection: 'row',
     width: '100%',
+    //width: 'auto',
     height: 80,
-    borderRadius: 20,
-    resizeMode: 'contain'
-  },
-  SecondLevel:{
-    backgroundColor: '#cccccc',
-    width: '90%',
-    height: 80,
-    borderRadius: 20,
-    resizeMode: 'contain'
-  },
-  ThirdLevel:{
-    backgroundColor: '#d6d6d6',
-    width: '85%',
-    height: 80,
-    borderRadius: 20,
-    resizeMode: 'contain',
-    flexWrap: 'wrap',
-    justifyContent: "center",
-    padding: 20
+    borderBottomLeftRadius:40,
+    borderTopLeftRadius:40,
+    padding: 30,
+    justifyContent: "space-between",
+     alignItems: 'center'
+    //resizeMode: 'contain'
   },
   Title:{
     fontFamily: "MyriadPro",

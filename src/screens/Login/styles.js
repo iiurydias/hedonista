@@ -11,24 +11,13 @@ const styles = StyleSheet.create({
   inputContainer:{
     width: WIDTH - 70,
     borderBottomWidth: 1,
-    //borderRadius: 20,
-    //shadowColor: "#000",
-    //shadowOffset: {
-     // width: 0,
-     // height: 1,
-    //},
-    //shadowOpacity: 0.22,
-    //shadowRadius: 2.22,
-    //elevation: 3,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    margin: 15    
+    margin: 15
     },
   emailInput:{
     fontFamily: "MyriadPro",
-    width: '90%',
-    //backgroundColor: '#FFF',
-    //borderRadius: 20,
+    width: '90%', 
     padding: 10,
     paddingLeft: 20,
     color: '#FFF',
@@ -37,7 +26,6 @@ const styles = StyleSheet.create({
   passInput:{
     fontFamily: "MyriadPro",
     width: '75%',
-    //backgroundColor: '#FFF',
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
     padding: 10,
@@ -97,7 +85,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   eyeBtn:{
-    //backgroundColor: 'white',
     width: '15%',
     justifyContent: "center",
     alignItems: "center",
