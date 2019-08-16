@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     color: '#999999'
   },
   FavoriteContainer:{
-    paddingLeft: 25,
-    paddingRight: 25,
+    paddingLeft: 35,
+    paddingRight: 35,
     backgroundColor: '#6746EC',
     height: '100%',
     borderTopStartRadius: 60,

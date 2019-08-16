@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import Header from "../../components/Header";
 import FavoriteBlock from "../../components/FavoriteBlock";
+import EditFavoriteBlock from "../../components/EditFavoriteBlock";
+import DeleteBlock from "../../components/DeleteBlock";
 import EmptyFavoriteBlock from "../../components/EmptyFavoriteBlock";
-import { View, Text, ScrollView, AsyncStorage, Alert, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, AsyncStorage, Alert, TouchableOpacity, Animated } from "react-native";
 import CategoryBox from "../../components/CategoryBox";
 import styles from "./styles";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -11,9 +13,14 @@ import Loading from '../../components/Loading';
 import api from '../../services/api';
 
 const NO_LOCATION_PROVIDER_AVAILABLE = 2;
-
+const EditFavoriteBlockAnimated = Animated.createAnimatedComponent(EditFavoriteBlock);
+const FavoriteBlockAnimated = Animated.createAnimatedComponent(FavoriteBlock);
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.left = new Animated.Value(0)
+  }
   state = {
     data: {
       categories: [],
@@ -27,9 +34,9 @@ class Home extends Component {
   }
   async getData() {
     try {
-      const response = await fetch(api+'/homedata',{
-        headers:{
-          token:  this.state.token
+      const response = await fetch(api + '/homedata', {
+        headers: {
+          token: this.state.token
         }
       });
       const result = await response.json();
@@ -69,7 +76,13 @@ class Home extends Component {
     await this.getData();
     this.setState({ visibleModal: false });
     this.checkLocation();
+    this.props.navigation.addListener('willFocus', this._handleStateChange);
   }
+  _handleStateChange = async () => {
+    this.setState({ visibleModal: true });
+    await this.getData();
+    this.setState({ visibleModal: false });
+  };
   _signOutAsync = async () => {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
@@ -77,11 +90,21 @@ class Home extends Component {
   _enableEdit = () => {
     if (this.state.editEnabled) {
       this.setState({ editEnabled: false })
+      Animated.timing(this.left, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true
+      }).start();
     } else {
       this.setState({ editEnabled: true })
+      Animated.timing(this.left, {
+        toValue: -25,
+        duration: 500,
+        useNativeDriver: true
+      }).start();
     }
   }
-  async removeFav($id) {
+  _removeFav = async ($id) => {
     data = this.state.data
     for (var i = 0; i < data.favorites.length; i++) {
       if (data.favorites[i].id === $id) {
@@ -90,16 +113,18 @@ class Home extends Component {
       this.setState({ data: data })
     }
   }
-  async unfavoriteAndRemove($id) {
-    await unfavorite($id)
-    await removeFav($id)
+  _unfavoriteAndRemove = async ($id) => {
+    this.setState({ visibleModal: true });
+    await this._unfavorite($id)
+    await this._removeFav($id)
+    this.setState({ visibleModal: false });
   }
-  async unfavorite($id) {
+  _unfavorite = async ($id) => {
     try {
-      const response = await fetch(api+'/unfavorite?favorite_id=' + $id, {
+      const response = await fetch(api + '/unfavorite?favorite_id=' + $id, {
         method: 'delete',
-        headers:{
-          token:  this.state.token
+        headers: {
+          token: this.state.token
         }
       });
       const result = await response.json();
@@ -113,12 +138,12 @@ class Home extends Component {
     }
   }
   render() {
-   const { data,
-    userName,
-    token,
-    editEnabled,
-    visibleModal,
-    userId } = this.state;
+    const { data,
+      userName,
+      token,
+      editEnabled,
+      visibleModal,
+      userId } = this.state;
     return (
       <Fragment>
         <Loading visible={this.state.visibleModal} />
@@ -175,42 +200,38 @@ class Home extends Component {
                 (this.state.editEnabled ?
                   (this.state.data.favorites.map(
                     p =>
-                      <Swipeable key={p.id} rightActionActivationDistance={150} rightContent={<View style={styles.btnDelete}>
-                        <Icon name='trash-alt' size={20} color="#d64541" />
-                      </View>} onRightActionRelease={() => this.unfavoriteAndRemove(p.id)}>
-                        <FavoriteBlock onPress={() => {
-                          this.props.navigation.navigate('PointProfile',
+                      <View key={p.id}>
+                        <View style={{ position: 'absolute', zIndex: 0 }}>
+                          <DeleteBlock />
+                        </View>
+                        <Swipeable key={p.id} rightActionActivationDistance={100} rightContent={<View >
+                        </View>} onRightActionRelease={() => { this._unfavoriteAndRemove(p.id) }}>
+                          <EditFavoriteBlockAnimated style={{ transform: [{ translateX: this.left }] }} icon={p.icon} title={p.point.name} address={p.point.address} />
+                        </Swipeable>
+                      </View>
+                  ))
+                  :
+                  (this.state.data.favorites.map(
+                    p =>
+                      <View key={p.id}>
+                        <View style={{ position: 'absolute', zIndex: 0 }}>
+                          <DeleteBlock />
+                        </View>
+                        <FavoriteBlockAnimated style={{ transform: [{ translateX: this.left }], zIndex: 1 }} key={p.id} onPress={() => {
+                         this.props.navigation.navigate('PointProfile',
                             {
                               title: p.point.name,
                               address: p.point.address,
                               latitude: p.point.latitude,
                               longitude: p.point.longitude,
                               navigationWithData: false,
-                              pointId: p.id,
+                              pointId: p.point.id,
                               token: token,
                               userId: userId,
                               author: p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)
                             })
                         }} icon={p.icon} title={p.point.name} address={p.point.address} />
-                      </Swipeable>
-                  )) :
-                  (this.state.data.favorites.map(
-                    p =>
-                      <FavoriteBlock key={p.id} onPress={() => {
-                        this.props.navigation.navigate('PointProfile',
-                          {
-                            title: p.point.name,
-                            address: p.point.address,
-                            latitude: p.point.latitude,
-                            longitude: p.point.longitude,
-                            navigationWithData: false,
-                            pointId: p.id,
-                            token: token,
-                            userId: userId,
-                            author: p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)
-                          
-                          })
-                      }} icon={p.icon} title={p.point.name} address={p.point.address} />
+                      </View>
                   ))
                 )
                 :

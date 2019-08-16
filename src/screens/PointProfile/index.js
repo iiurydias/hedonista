@@ -40,9 +40,9 @@ class PointProfile extends Component {
       });
       const result = await response.json();
       if (result.success) {
-
+        Alert.alert("Sucesso", "Ponto favoritado!");
       } else {
-        Alert.alert("Erro", "Ponto já favoritado");
+        Alert.alert("Falha", "Ponto já favoritado");
       }
     } catch (error) {
       Alert.alert("Erro", "Verifique sua conexão.");
@@ -59,7 +59,7 @@ class PointProfile extends Component {
       if (result.success) {
         this.setState({ comments: result.data })
       } else {
-        Alert.alert("Erro", result.message);
+        Alert.alert("Erro", JSON.stringify(result.data));
       }
     } catch (error) {
       Alert.alert("Erro", "Verifique sua conexão.");
@@ -69,6 +69,7 @@ class PointProfile extends Component {
     if (this.state.comment == "") {
       Alert.alert("Alerta", "Digite um comentário primeiro!");
     } else {
+      this.textInput.clear();
       this.setState({ visibleModal: true });
       await this.toComment();
       await this.getComments();
@@ -85,7 +86,7 @@ class PointProfile extends Component {
       });
       const result = await response.json();
       if (result.success) {
-        this.setState({ comment: "" });
+        this.setState({ comment: ' '});
       } else {
         Alert.alert("Erro", result.data );
       }
@@ -121,7 +122,7 @@ class PointProfile extends Component {
     this.setState({ visibleModal: false });
   }
 
-  async favorite(){
+  favorite = async () => {
     this.setState({ visibleModal: true });
     await this.tofavorite();
     this.setState({ visibleModal: false });
@@ -221,6 +222,7 @@ class PointProfile extends Component {
           <View style={styles.InputContainer}>
             <TextInput
               multiline={true}
+              ref={input => { this.textInput = input }}
               maxHeight={60}
               maxLength={200}
               style={styles.InputComment}
