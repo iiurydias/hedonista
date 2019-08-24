@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styles from "./styles";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, AsyncStorage, Alert, StatusBar } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, AsyncStorage, Alert, StatusBar, Image } from "react-native";
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Loading from '../../components/Loading';
@@ -31,15 +31,23 @@ class Login extends Component {
   handleEmailFocus = () => this.setState({ emailFocused: true })
   handleEmailBlur = () => this.setState({ emailFocused: false })
   _signInAsync = async () => {
-    if (this.validate()) {
+    if (this.validateEmail() && this.validatePass()) {
       this.setState({ visibleModal: true });
       await this.getData()
       this.setState({ visibleModal: false });
     }
   }
-  validate = () => {
-    if (this.state.user == "" || this.state.pass == "") {
-      this.setState({ warning: 'Por favor, preencha os campos', wrongLogin: true })
+  validateEmail = () => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (this.state.user == "" || reg.test(this.state.user) === false) {
+      this.setState({ warning: 'Por favor, preencha com um email válido', wrongLogin: true })
+      return false
+    }
+    return true
+  }
+  validatePass = () => {
+    if (this.state.pass == "") {
+      this.setState({ warning: 'Por favor, insira sua senha, antes de prosseguir', wrongLogin: true })
       return false
     }
     return true
@@ -49,6 +57,42 @@ class Login extends Component {
   }
   passInputChange = (text) => {
     this.setState({ pass: text })
+  }
+  _forgotpass = async () => {
+    if (this.validateEmail()) {
+      Alert.alert(
+        'Esqueci minha senha',
+        'Deseja enviar um email de recuperação de senha para '+ this.state.user+'?',
+        [
+          {
+            text: 'Cancelar',
+          },
+          {text: 'Enviar', onPress: async ()  => {
+            this.setState({ visibleModal: true });
+            await this.sendEmail()
+            this.setState({ visibleModal: false });
+          }},
+        ]
+      );
+    }
+  }
+  sendEmail = async () => {
+    let data = new FormData();
+    data.append("email", this.state.user);
+    try {
+      const response = await fetch(api + '/sendmail', {
+        method: 'POST',
+        body: data
+      });
+      const result = await response.json();
+      if (result.success) {
+        Alert.alert("Sucesso", "Email enviado, verifique sua caixa de entrada para a recuperação de sua senha.")
+      } else {
+        Alert.alert("Erro", "Nenhuma conta encontrada com esse email.");
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Verifique sua conexão.");
+    }
   }
   async getData() {
     try {
@@ -72,9 +116,12 @@ class Login extends Component {
         <StatusBar backgroundColor="#7049f9" />
         <Loading visible={this.state.visibleModal} />
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
-          <View style={styles.logoContainer}>
-            <Text style={styles.logo}>LOGO HEDONISTA AQUI</Text>
-          </View>
+          <View style={styles.logoBox}>
+        <Image
+              style={styles.logo}
+              source={require('../../assets/img/logo.png')}
+            />
+            </View>
           <View style={[styles.inputContainer, this.state.emailFocused ? { borderBottomColor: '#FFF' } : { borderBottomColor: '#AAA' }]}>
             <View style={[styles.inputIcon, this.state.emailFocused ? { opacity: 1 } : { opacity: 0.5 }]}>
               <Icon name='at' size={20} color="#FFF" />
@@ -108,8 +155,13 @@ class Login extends Component {
               </TouchableOpacity>
             </View>
           </View>
+          <View style={[styles.inputContainer, {borderBottomWidth: 0, margin: 0}]}>
+          <TouchableOpacity style={{width: '100%', alignItems: 'flex-end'}} activeOpacity={0.9} onPress={this._forgotpass}>
+                <Text style={styles.createAccountTxt}> Esqueci minha senha</Text>
+              </TouchableOpacity>
+          </View>
           {this.state.wrongLogin &&
-            <Text style={styles.invalid}>{this.state.warning}</Text>
+            <Text style={styles.invalid} textAlign='center'>{this.state.warning}</Text>
           }
           <View style={styles.bottomContainer}>
             <View style={styles.buttonContainer}>

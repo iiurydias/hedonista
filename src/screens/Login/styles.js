@@ -6,10 +6,12 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
     marginBottom: 20,
-    marginTop: 20
+    marginTop: 20,
+    padding: 40,
+    paddingTop:0
   },
   inputContainer:{
-    width: WIDTH - 70,
+    width: '100%',
     borderBottomWidth: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
@@ -37,17 +39,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  logo:{
-    fontFamily: "MyriadPro",
-    fontSize: 30,
-    color: '#FFF'
-  },
   logoContainer:{
-    marginBottom: 20
+    width: '100%',
+    marginBottom: 10,
+    backgroundColor: 'red'
   },
   Button:{
     backgroundColor: '#FFF',
-    borderRadius: 40,
+    borderRadius: 23,
     height: 45,
     justifyContent: "center",
     alignItems: "center",
@@ -58,6 +57,7 @@ const styles = StyleSheet.create({
     color: '#7049f9'
   },
   bottomContainer:{
+    width: '100%',
     marginTop: 15,
     justifyContent: "center",
     alignItems: "center",
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonContainer:{
-    width: WIDTH - 55,
+    width: '100%',
     marginTop: 25
   },
   createAccountContainer:{
@@ -91,6 +91,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
     paddingRight: 20
+  },
+  logo: {
+    width: '100%',
+    resizeMode: "contain"
+  },
+  logoBox: {
+    width: '100%',
+    paddingLeft: 60,
+    paddingRight: 60,
   }
 });
 

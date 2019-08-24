@@ -24,7 +24,8 @@ class NewPoint extends Component {
     myCurrentAddress: 'Meu endereço atual',
     myLocation: null,
     visibleModal: false,
-
+    myCurrentAddressBackup: "",
+    myLocationBackup: "",
   }
   validateName = () => {
     if (this.state.name === '' || (this.state.name.length) < 2) {
@@ -92,7 +93,7 @@ class NewPoint extends Component {
     })
   }
   clearInput = () => {
-    this.setState({ clearButtonEnabled: false })
+    this.setState({ clearButtonEnabled: false, myCurrentAddress: "" })
     this.googlePlacesAutocomplete._handleChangeText('');
   }
   addressController = (itemValue) => {
@@ -109,7 +110,8 @@ class NewPoint extends Component {
         this.setState({ typeAddressEnabled: false });
         this.setState({ markCurrentLocationEnabled: true });
         this.setState({ markOnMapEnabled: false });
-        this.setState({ myCurrentAddress: "" });
+        this.setState({ myCurrentAddress: this.state.myCurrentAddressBackup });
+        this.setState({ myLocation: this.state.myLocationBackup });
         break;
       case 'mark_on_map':
         this.setState({ typeAddressEnabled: false });
@@ -130,7 +132,7 @@ class NewPoint extends Component {
     const origin = this.props.navigation.getParam('origin');
     GeoCoder.from({ latitude: origin.latitude, longitude: origin.longitude }).then((response) => {
       const address = response.results[0].formatted_address;
-      this.setState({ myCurrentAddress: address, myLocation: origin })
+      this.setState({ myCurrentAddress: address, myLocation: origin, myCurrentAddressBackup: address, myLocationBackup: origin })
     }).catch(() => {
       this.setState({ myCurrentAddress: "Erro ao pegar seu endereço atual" })
     });
@@ -147,7 +149,6 @@ class NewPoint extends Component {
     this.setState({ myLocation: region })
     GeoCoder.from(region).then((response) => {
       const address = response.results[0].formatted_address;
-      this.setState({ myCurrentAddress: address })
       this.setState({ myCurrentAddress: address })
     }).catch(() => {
       this.setState({ myCurrentAddress: "Erro ao pegar seu endereço atual" })

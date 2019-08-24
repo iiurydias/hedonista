@@ -30,7 +30,8 @@ class Home extends Component {
     token: '',
     editEnabled: false,
     visibleModal: false,
-    userId: ''
+    userId: '',
+    locationGot: false
   }
   async getData() {
     try {
@@ -59,12 +60,10 @@ class Home extends Component {
   checkLocation() {
     navigator.geolocation.getCurrentPosition(
       () => {
+        this.setState({ locationGot: true })
       },
       (error) => {
-        if (error.code === NO_LOCATION_PROVIDER_AVAILABLE) {
-          Alert.alert("Alerta", 'Você precisa habilitar sua localização para que possamos encontrar os pontos mais próximos de você!');
-          this.setState({ locationGot: false })
-        }
+        Alert.alert("Alerta", 'Você precisa habilitar sua localização para que possamos encontrar os pontos mais próximos de você!');
         this.setState({ locationGot: false })
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -172,7 +171,14 @@ class Home extends Component {
                 {this.state.data.categories.length > 0 ?
                   (this.state.data.categories.map(
                     p =>
-                      <CategoryBox key={p.id} onPress={() => { this.props.navigation.navigate('SubcategoryList', { categoryId: p.id, token: this.state.token, icon: p.icon, userId: this.state.userId }) }} icon={p.icon} title={p.name} pointNumber={p.pointsNumber} />
+                      <CategoryBox key={p.id} onPress={() => { 
+                        this.state.locationGot ?
+                        this.props.navigation.navigate('SubcategoryList', { categoryId: p.id, token: this.state.token, icon: p.icon, userId: this.state.userId }) 
+                      :
+                      Alert.alert('Atenção', 'Você precisa fornecer sua localização para vizualizar os pontos!');
+                      this.checkLocation();
+                      }
+                      } icon={p.icon} title={p.name} pointNumber={p.pointsNumber} />
                   ))
                   :
                   <CategoryBox />

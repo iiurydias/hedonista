@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, Alert, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import { View, Text, Alert, TouchableOpacity, ScrollView, TextInput, BackHandler } from "react-native";
 import SubcategoryBox from "../../components/SubcategoryBox";
 import Header from "../../components/Header";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -83,6 +83,13 @@ class SubcategoryList extends Component {
     await this.getData();
     this.setState({ visibleModal: false });
     this.props.navigation.addListener('willFocus', this._handleStateChange);
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+  handleBackPress = () => {
+    if (this.state.toCreate) {
+      this.setState({ toCreate: false });
+        return true
+    } else { this.props.navigation.goBack();  return true }
   }
   _handleStateChange = async () => {
     this.setState({ visibleModal: true });
@@ -114,7 +121,7 @@ class SubcategoryList extends Component {
             <Text style={styles.H1}>Você pode entrar
           em uma delas para vizualizar os pontos ou criar uma nova através do botão no canto inferior direito da tela.</Text>
           </View>
-          <View style={{ flex: 1, backgroundColor: '#EEEEEE', padding: 30, paddingRight: 0, borderTopStartRadius: 50, height: '100%' }}>
+          <View style={{ flex: 1, backgroundColor: '#EEEEEE', padding: 30, paddingLeft: 70, paddingRight: 0, borderTopStartRadius: 50, height: '100%' }}>
             <View>
               {this.state.data.length > 0 ?
                 (this.state.data.map(
@@ -139,7 +146,7 @@ class SubcategoryList extends Component {
           </View>
         </ScrollView>
         {!this.state.toCreate ?
-          <View style={{ alignItems: 'flex-end', position: 'absolute', bottom: 0, right: 0, justifyContent: 'flex-end' }}>
+          <View style={{ alignItems: 'flex-start', position: 'absolute', bottom: 0, left: 0, justifyContent: 'flex-start' }}>
             <Add onPress={() => { this.setState({ toCreate: true }) }} />
           </View>
           :

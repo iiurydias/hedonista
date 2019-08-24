@@ -31,12 +31,15 @@ class PointProfile extends Component {
     this.setState({ comment: text })
   }
   tofavorite = async () => {
+    let data = new FormData();
+    data.append("point_id", this.props.navigation.getParam('pointId'));
     try {
-      const response = await fetch(api + '/tofavorite?point_id=' + this.props.navigation.getParam('pointId'), {
-        method: 'post',
+      const response = await fetch(api + '/tofavorite', {
+        method: 'POST',
         headers: {
           token: this.props.navigation.getParam('token')
-        }
+        },
+        body: data
       });
       const result = await response.json();
       if (result.success) {
@@ -59,7 +62,7 @@ class PointProfile extends Component {
       if (result.success) {
         this.setState({ comments: result.data })
       } else {
-        Alert.alert("Erro", JSON.stringify(result.data));
+        Alert.alert("Erro", "Falha interna");
       }
     } catch (error) {
       Alert.alert("Erro", "Verifique sua conexão.");
@@ -77,16 +80,21 @@ class PointProfile extends Component {
     }
   }
   toComment = async () => {
+    let data = new FormData();
+    data.append("point_id", this.props.navigation.getParam('pointId'));
+    data.append("user_id", this.props.navigation.getParam('userId'));
+    data.append("comment", this.state.comment);
     try {
-      const response = await fetch(api + '/comment?point_id=' + this.props.navigation.getParam('pointId') + '&user_id=' + this.props.navigation.getParam('userId') + '&comment=' + this.state.comment, {
-        method: 'post',
+      const response = await fetch(api + '/comment', {
+        method: 'POST',
         headers: {
           token: this.props.navigation.getParam('token')
-        }
+        },
+        body: data
       });
       const result = await response.json();
       if (result.success) {
-        this.setState({ comment: ' '});
+        this.setState({ comment: ""});
       } else {
         Alert.alert("Erro", result.data );
       }
@@ -208,7 +216,7 @@ class PointProfile extends Component {
           <View style={styles.Comments}>
             <Text style={styles.H1}>Referências</Text>
             <View style={{ padding: 20, paddingTop: 0, paddingBottom: 10, justifyContent: "center", alignItems: "center" }} >
-              {this.state.comments.length != [] ? this.state.comments.map(
+              {this.state.comments.length != 0 ? this.state.comments.map(
                 p =>
                   <CommentBlock key={p.id} author={p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)} comment={p.comment} date={p.created_at} />
               ) :

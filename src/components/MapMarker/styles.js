@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
      height: 0,
      backgroundColor: 'transparent',
      borderStyle: 'solid',
-     borderTopWidth: 30,
+     borderTopWidth: 29,
      borderRightWidth: 21,
      borderBottomWidth: 0,
      borderLeftWidth: 21,

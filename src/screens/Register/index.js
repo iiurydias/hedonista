@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import styles from "./styles";
-import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, StatusBar } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, StatusBar, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import LinearGradient from 'react-native-linear-gradient'
+import Loading from '../../components/Loading';
 
 class Register extends Component {
   state = {
@@ -21,43 +22,75 @@ class Register extends Component {
     emailFocused: false,
     passFocused: false,
     confirmPassFocused: false,
+    visibleModal: false
   }
   validateEmail = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (this.state.email === '' || reg.test(this.state.email) === false) {
       this.setState({ missEmail: true })
+      return false
     }
     else {
       this.setState({ missEmail: false })
+      return true
+    }
+  }
+  _register = async () => {
+    let data = new FormData();
+    data.append("name", this.state.name);
+    data.append("lastName", this.state.lastName);
+    data.append("email", this.state.email);
+    data.append("password", this.state.pass);
+    try {
+      const response = await fetch(api + '/user', {
+        method: 'POST',
+        body: data
+      });
+      const result = await response.json();
+      if (result.success) {
+        this.props.navigation.goBack();
+      } else {
+        Alert.alert("Erro", "Email já utilizado em outra conta!");
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Verifique sua conexão.");
     }
   }
   comparePasses = () => {
     if (this.state.pass === '' && this.state.confirmPass === '') {
       this.setState({ missPass: true })
       this.setState({ missConfirmPass: true })
+      return false
     } else if (this.state.pass === '') {
       this.setState({ missPass: true })
+      return false
     } else if (this.state.pass != this.state.confirmPass) {
       this.setState({ missPass: true })
       this.setState({ missConfirmPass: true })
+      return false
     }
     else {
       this.setState({ missPass: false })
       this.setState({ missConfirmPass: false })
+      return true
     }
   }
   validateName = () => {
     if (this.state.name === '' || (this.state.name.length) < 2 || this.state.name.includes(" ")) {
       this.setState({ missName: true })
+      return false
     } else {
       this.setState({ missName: false })
+      return true
     }
   }
   validateLastName = () => {
     if (this.state.lastName === '' || (this.state.lastName.length) < 2 || this.state.lastName.includes(" ")) {
       this.setState({ missLastName: true })
+      return false
     } else {
       this.setState({ missLastName: false })
+      return true
     }
   }
   setName = (text) => {
@@ -80,16 +113,17 @@ class Register extends Component {
     this.setState({ missConfirmPass: false })
     this.setState({ confirmPass: text });
   }
-  validation = () => {
+  _validateAndRegister = async () => {
     this.setState({ lastNameFocused: false })
     this.setState({ nameFocused: false })
     this.setState({ emailFocused: false })
     this.setState({ passFocused: false })
     this.setState({ confirmPassFocused: false })
-    this.validateName();
-    this.validateEmail();
-    this.comparePasses();
-    this.validateLastName();
+    if (this.validateName() && this.validateEmail() && this.comparePasses() && this.validateLastName()) {
+      this.setState({ visibleModal: true });
+      await this._register();
+      this.setState({ visibleModal: false });
+    }
   }
   handleNameFocus = () => this.setState({ nameFocused: true })
   handleNameBlur = () => this.setState({ nameFocused: false })
@@ -101,33 +135,12 @@ class Register extends Component {
   handlePassBlur = () => this.setState({ passFocused: false })
   handleConfirmPassFocus = () => this.setState({ confirmPassFocused: true })
   handleConfirmPassBlur = () => this.setState({ confirmPassFocused: false })
-  async getData() {
-    try {
-      const response = await fetch('http://hedonista-com-br.hostoo.net/api/getHomeData?token=' + this.props.navigation.getParam('token'), {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: 'test',
-          password: 'test123',
-        })
-      });
-      const result = await response.json();
-      if (result.status) {
-        this.setState({ dataRand: result.dados });
-      } else {
-        Alert.alert("Erro", result.message);
-      }
-    } catch (error) {
-      Alert.alert("Erro", "Verifique sua conexão.");
-    }
-  }
+
   render() {
     const { width: WIDTH } = Dimensions.get('window')
     return (
       <LinearGradient colors={['#7049f9', '#9b6eff']} height='100%'>
+        <Loading visible={this.state.visibleModal} />
         <StatusBar backgroundColor="#7049f9" />
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={styles.Container} contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -209,7 +222,7 @@ class Register extends Component {
             </View>
             <View style={styles.bottomContainer}>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { this.validation() }}>
+                <TouchableOpacity style={styles.Button} activeOpacity={0.9} onPress={() => { this._validateAndRegister() }}>
                   <Text style={styles.btnTxt}>Criar conta</Text>
                 </TouchableOpacity>
               </View>
