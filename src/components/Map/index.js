@@ -188,7 +188,7 @@ class Map extends Component {
                   p.longitude,
                   latitude,
                   longitude
-                ) < 20 && (
+                ) < 40 && (
                   <Marker
                     tracksViewChanges={tracksViewChanges}
                     key={p.id}
@@ -288,6 +288,7 @@ class Map extends Component {
                           navigationWithData: true,
                           pointId: this.state.pointLocation.key,
                           token: this.props.token,
+                          icon: this.props.icon,
                           userId: this.props.userId,
                           author: this.state.pointLocation.author
                         })

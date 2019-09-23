@@ -30,8 +30,7 @@ class Home extends Component {
     token: '',
     editEnabled: false,
     visibleModal: false,
-    userId: '',
-    locationGot: false
+    userId: ''
   }
   async getData() {
     try {
@@ -60,11 +59,8 @@ class Home extends Component {
   checkLocation() {
     navigator.geolocation.getCurrentPosition(
       () => {
-        this.setState({ locationGot: true })
       },
       (error) => {
-        Alert.alert("Alerta", 'Você precisa habilitar sua localização para que possamos encontrar os pontos mais próximos de você!');
-        this.setState({ locationGot: false })
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
@@ -128,7 +124,7 @@ class Home extends Component {
       });
       const result = await response.json();
       if (result.success) {
-
+        this._enableEdit()
       } else {
         Alert.alert("Erro", "Falha interna");
       }
@@ -172,10 +168,8 @@ class Home extends Component {
                   (this.state.data.categories.map(
                     p =>
                       <CategoryBox key={p.id} onPress={() => { 
-                        this.state.locationGot ?
+                        this.checkLocation();
                         this.props.navigation.navigate('SubcategoryList', { categoryId: p.id, token: this.state.token, icon: p.icon, userId: this.state.userId }) 
-                      :
-                      Alert.alert('Atenção', 'Você precisa fornecer sua localização para vizualizar os pontos!');
                       this.checkLocation();
                       }
                       } icon={p.icon} title={p.name} pointNumber={p.pointsNumber} />
@@ -234,6 +228,7 @@ class Home extends Component {
                               pointId: p.point.id,
                               token: token,
                               userId: userId,
+                              icon: p.icon,
                               author: p.author.name.charAt(0).toUpperCase() + p.author.name.slice(1) + " " + p.author.lastName.charAt(0).toUpperCase() + p.author.lastName.slice(1)
                             })
                         }} icon={p.icon} title={p.point.name} address={p.point.address} />

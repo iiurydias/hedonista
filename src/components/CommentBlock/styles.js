@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     borderTopStartRadius: 0,
-    borderBottomEndRadius: 0,
+    //borderBottomEndRadius: 0,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     color: "#6646EB"
   },
   Comment:{
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "MyriadPro",
     color: '#AAAAAA',
     marginTop: 3,

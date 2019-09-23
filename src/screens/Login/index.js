@@ -131,6 +131,7 @@ class Login extends Component {
               onBlur={this.handleEmailBlur}
               style={[styles.emailInput, , this.state.emailFocused ? { opacity: 1 } : { opacity: 0.5 }]}
               placeholder='Email'
+              autoCapitalize = 'none'
               placeholderTextColor='#FFF'
               onChangeText={this.emailInputChange}
             />
@@ -146,6 +147,7 @@ class Login extends Component {
               maxLength={20}
               secureTextEntry={this.state.showPass}
               placeholder='Senha'
+              autoCapitalize = 'none'
               placeholderTextColor='#FFF'
               onChangeText={this.passInputChange}
             />

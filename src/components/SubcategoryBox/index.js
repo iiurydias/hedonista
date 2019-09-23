@@ -8,10 +8,10 @@ class SubcategoryBox extends Component {
     return (
       <TouchableOpacity onPress={this.props.onPress} activeOpacity={0.9} style={styles.Container}>
         <View style={styles.FirstLevel}>
-          <View >
+          <View style={{width: '90%'}}>
             <Text numberOfLines={2} style={styles.Title}>{this.props.name}</Text>
           </View>
-          <View style={{margin: 20}}>
+          <View style={{width: '10%', margin: 20}}>
             <Icon name='arrow-right' size={20} color="#7d7d7d" />
           </View>
         </View>

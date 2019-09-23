@@ -24,6 +24,7 @@ class PointProfile extends Component {
     navigationWithData: false,
     title: "",
     address: "",
+    icon: "",
     comment: "",
     visibleModal: false
   }
@@ -112,7 +113,8 @@ class PointProfile extends Component {
         longitudeDelta: 0.001
       },
       title: this.props.navigation.getParam('title'),
-      address: this.props.navigation.getParam('address')
+      address: this.props.navigation.getParam('address'),
+      icon: this.props.navigation.getParam('icon')
     })
     const navigationWithData = this.props.navigation.getParam('navigationWithData')
     if (navigationWithData) {
@@ -172,7 +174,7 @@ class PointProfile extends Component {
                 }
                 }
               >
-                <MapMarker mounted={() => { }} icon='utensils' />
+                <MapMarker mounted={() => { }} icon={this.state.icon} />
               </Marker>
             </MapView>
 
@@ -232,7 +234,7 @@ class PointProfile extends Component {
               multiline={true}
               ref={input => { this.textInput = input }}
               maxHeight={60}
-              maxLength={200}
+              maxLength={150}
               style={styles.InputComment}
               onChangeText={this.commentInputChange}
             />

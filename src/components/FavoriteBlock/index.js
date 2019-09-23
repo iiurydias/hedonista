@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 export default class FavoriteBlock extends Component {
   render() {
     return (
-      <TouchableOpacity activeOpacity={0.95} onPress={this.props.onPress}>
+      <TouchableOpacity activeOpacity={0.98} onPress={this.props.onPress}>
         <View style={[styles.Container, this.props.style]}>
           <View style={styles.InfoContainer}>
             <Text style={styles.Title} numberOfLines={1}>{this.props.title}</Text>

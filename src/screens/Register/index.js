@@ -186,6 +186,7 @@ class Register extends Component {
                 style={[styles.input, this.state.emailFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missEmail ? { color: '#ff4349' } : { color: '#FFF' }))]}
                 value={this.state.email}
                 placeholder='Email'
+                autoCapitalize = 'none'
                 placeholderTextColor={this.state.emailFocused ? '#FFF' : this.state.missEmail ? '#ff4349' : '#FFF'}
                 onChangeText={this.setEmail}
               />
@@ -200,6 +201,7 @@ class Register extends Component {
                 secureTextEntry={true}
                 style={[styles.input, this.state.passFocused ? ({ opacity: 1 }, { color: '#FFF' }) : ({ opacity: 0.5 }, (this.state.missPass ? { color: '#ff4349' } : { color: '#FFF' }))]}
                 placeholder='Senha'
+                autoCapitalize = 'none'
                 maxLength={20}
                 placeholderTextColor={this.state.passFocused ? '#FFF' : this.state.missPass ? '#ff4349' : '#FFF'}
                 onChangeText={this.setPass}
